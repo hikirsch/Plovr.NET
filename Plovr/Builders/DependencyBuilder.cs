@@ -146,36 +146,39 @@ namespace Plovr.Builders
 			this.Require.Add(filePath, new List<string>());
 
 			////////////////////////////////////////////////
-			// Handle the provides. (this.ProvideJSFunction)
+			// Handle the provides. (GoogProvide)
 			////////////////////////////////////////////////
 			// setup our pattern, this replace allows me to maintain the require and provide statements without worrying about the syntax of a regex
-			var providePattern = string.Format( JavascriptFunctionCallWithParam, GoogProvide.Replace(".", @"\.") );
+			var providePattern = string.Format(JavascriptFunctionCallWithParam, GoogProvide.Replace(".", @"\."));
 			MatchCollection provideMatch = Regex.Matches(contents, providePattern);
 			if (provideMatch.Count > 0)
 			{
 				// we can have multiple provides in the same file, so we have to go through all of them.
 				foreach (Match match in provideMatch)
 				{
-					if (match.Groups[1].Success)
+					for (int i = 0; i < match.Groups.Count; i++)
 					{
-						// get the value of what this file provides
-						string value = match.Groups[1].Value;
-
-						// you are only allowed to declare a namespace once, if it gets declared again, we throw this error
-						if (this.Provide.ContainsKey(value))
+						if (match.Groups[i].Success)
 						{
-							var declaredNamespace = this.Provide[value];
-							throw new Exception("The namespace '" + value + "' has already been declared in '" + declaredNamespace + "' and '" + filePath + "'.");
-						}
+							// get the value of what this file provides
+							string value = match.Groups[i].Value;
 
-						// add the provide
-						this.Provide.Add(value, filePath);
+							// you are only allowed to declare a namespace once, if it gets declared again, we throw this error
+							if (this.Provide.ContainsKey(value))
+							{
+								var declaredNamespace = this.Provide[value];
+								throw new Exception("The namespace '" + value + "' has already been declared in '" + declaredNamespace + "' and '" + filePath + "'.");
+							}
+
+							// add the provide
+							this.Provide.Add(value, filePath);
+						}
 					}
 				}
 			}
 
 			////////////////////////////////////////////////
-			// Handle the requires. (this.RequireJSFunction)
+			// Handle the requires. (GoogRequire)
 			////////////////////////////////////////////////
 			var requirePattern = string.Format(JavascriptFunctionCallWithParam, GoogRequire.Replace(".", @"\."));
 			MatchCollection requireMatch = Regex.Matches(contents, requirePattern, RegexOptions.Singleline);
@@ -184,15 +187,18 @@ namespace Plovr.Builders
 				// go through each match.
 				foreach (Match match in requireMatch)
 				{
-					if (match.Groups[1].Success)
+					for (int i = 0; i < match.Groups.Count; i++)
 					{
-						// get the value of the match and add it
-						string value = match.Groups[1].Value;
-						if (value.Contains("goog.require"))
+						if (match.Groups[i].Success)
 						{
-							throw new Exception("error parsing file: " + filePath + ". Namespace detected as: '" + value + "'");
+							// get the value of the match and add it
+							string value = match.Groups[i].Value;
+							if (value.Contains("goog.require"))
+							{
+								throw new Exception("error parsing file: " + filePath + ". Namespace detected as: '" + value + "'");
+							}
+							this.Require[filePath].Add(value);
 						}
-						this.Require[filePath].Add(value);
 					}
 				}
 			}

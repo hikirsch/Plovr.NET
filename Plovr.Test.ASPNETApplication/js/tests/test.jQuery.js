@@ -1,4 +1,4 @@
-﻿goog.provide('test.jQuery');
+﻿goog.provide("test.jQuery");
 
 test.jQuery.init = function () {
 	test.jQuery.addIt('<div>Yay! jQuery Works!</div>', 'body');
