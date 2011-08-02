@@ -76,6 +76,12 @@ namespace Plovr
 			return new List<string> {str};
 		}
 
+		/// <summary>
+		/// Take an string value that represents an Enum and parse it.
+		/// </summary>
+		/// <typeparam name="TEnumType">the type of Enum to parse to</typeparam>
+		/// <param name="value">the string value of the enum</param>
+		/// <returns>the typed Enum or null if it wasn't valid</returns>
 		public static TEnumType? MapToEnum<TEnumType>(string value) where TEnumType : struct
 		{
 			var mode = value;
@@ -85,8 +91,7 @@ namespace Plovr
 				return null;
 			}
 
-			TEnumType result;
-			Enum.TryParse(mode, true, out result);
+			TEnumType result = (TEnumType) Enum.Parse(typeof(TEnumType), value, true);
 
 			return result;
 		}

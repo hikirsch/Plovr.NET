@@ -136,7 +136,7 @@ namespace Plovr.Handlers
 		{
 			// get all the dependencies and reformat the paths for URLs on the site.
 			IEnumerable<string> urlDependencies = builder.GetDependencies().Select(PathHelpers.MakeRelativeFromPath);
-			string dependencyCsv = string.Join("', '", urlDependencies);
+			string dependencyCsv = string.Join("', '", urlDependencies.ToArray());
 
 			// grab the javascript embedded resource.
 			string plovrJavaScriptIncluder = ResourceHelper.GetTextResourceById(PlovrJavaScriptLoaderResourceId);
