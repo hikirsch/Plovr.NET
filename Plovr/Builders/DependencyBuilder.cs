@@ -156,7 +156,7 @@ namespace Plovr.Builders
 				// we can have multiple provides in the same file, so we have to go through all of them.
 				foreach (Match match in provideMatch)
 				{
-					for (int i = 0; i < match.Groups.Count; i++)
+					for (int i = 1; i < match.Groups.Count; i++)
 					{
 						if (match.Groups[i].Success)
 						{
@@ -187,7 +187,7 @@ namespace Plovr.Builders
 				// go through each match.
 				foreach (Match match in requireMatch)
 				{
-					for (int i = 0; i < match.Groups.Count; i++)
+					for (int i = 1; i < match.Groups.Count; i++)
 					{
 						if (match.Groups[i].Success)
 						{
