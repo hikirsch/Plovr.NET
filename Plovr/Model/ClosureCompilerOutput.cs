@@ -24,9 +24,5 @@ namespace Plovr.Model
 		public string StandardError { get; set; }
 
 		public List<ClosureCompilerMessage> Messages { get; set; }
-
-		// TOOD: error and warning count
-		public int ErrorCount { get; set; }
-		public int WarningCount { get; set; }
 	}
 }
