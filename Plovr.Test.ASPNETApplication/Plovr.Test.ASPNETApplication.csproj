@@ -1617,10 +1617,10 @@
     <Content Include="js\goog\vec\vec_perf.html" />
     <Content Include="js\goog\window\window.js" />
     <Content Include="js\goog\window\window_test.html" />
-    <Content Include="js\jquery-1.6.1.min.js" />
     <Content Include="js\jquery-1.6.1-externs.js" />
+    <Content Include="js\jquery-1.6.2.min.js" />
     <Content Include="js\oiny\events\DomReady.js" />
-    <Content Include="js\tests\test.AnotherClass.js" />
+    <Content Include="js\tests\test.AnotherTest.js" />
     <Content Include="js\tests\test.Calendar.js" />
     <Content Include="js\tests\test.jQuery.js" />
     <Content Include="js\plovr\MessageSystem.js" />

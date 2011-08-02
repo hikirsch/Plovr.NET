@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="/css/closure/inputdatepicker.css" /> 
 		
 		<!-- we still include jquery as we normally would -->
-		<script src="/js/jquery-1.6.1.min.js"></script>
+		<script src="/js/jquery-1.6.2.min.js"></script>
 	</head>
 	<body> 
 		<!-- use the path from the web.config -->

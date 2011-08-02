@@ -17,14 +17,14 @@
 	 * the namespaces that you wish to compile, this is an array
 	 * @type Array
 	 */
-	"namespaces": [ "plovr.CalendarTest" ],
+	"namespaces": [ "test.Calendar" ],
 	
 	/**
 	 * any extern files you want to pass to the closure compiler, if you're using jQuery on a project, you'll want to use the
 	 * jQuery externs file or whatever external library you may be using.
 	 * This parameter is ~/ friendly.
 	 * @type Array
-	  "externs": [ "~/js/jquery-1.6-externs.js" ],
+	  "externs": [ "~/js/jquery-1.6.1-externs.js" ],
 	 */ 
 	
 	
@@ -40,5 +40,5 @@
 	 * This parameter is ~/ friendly.
 	 * @type String
 	 */
-	"outputFile": "~/js/plovr-calendar-compiled.js"
+	"outputFile": "~/js/test-calendar-compiled.js"
 }
