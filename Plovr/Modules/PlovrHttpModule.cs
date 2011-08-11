@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -49,12 +50,66 @@ namespace Plovr.Modules
 		/// <param name="eventArgs"></param>
 		public void BeginRequest(object sender, EventArgs eventArgs)
 		{
-			var context = HttpContext.Current;
+			HttpContext context = HttpContext.Current;
+			string url = context.Request.RawUrl.ToLower();
 
-			if (!context.Request.RawUrl.ToLower().StartsWith("/plovr.net")) return;
+			// make sure this is a plovr request; otherwise, pass it along
+			if (!url.StartsWith("/plovr.net")) return;
 
+			// Pass extra url params in to the appropriate handler
 			// TODO: support all command_names from Plovr, @see http://code.google.com/p/plovr/source/browse/src/org/plovr/Handler.java 
 
+			string pattern = @"/[^/]+"; // matches '/path1', '/path2', '/path3' in '/path1/path2/path3/'
+			MatchCollection matches = Regex.Matches(url, pattern, RegexOptions.IgnoreCase);
+
+			// if we have specified additional params in the url
+			if (matches.Count > 1) {
+				switch (matches[1].ToString()) {
+					case "/config":
+						ConfigHandler(context);
+						break;
+					case "/compile":
+						CompileHandler(context);
+						break;
+					case "/externs":
+						ExternsHandler(context);
+						break;
+					case "/input":
+						InputHandler(context);
+						break;
+					case "/list":
+						ListHandler(context);
+						break;
+					case "/module":
+						ModuleHandler(context);
+						break;
+					case "/modules":
+						ModulesHandler(context);
+						break;
+					case "/size":
+						SizeHandler(context);
+						break;
+					case "/sourcemap":
+						SourcemapHandler(context);
+						break;
+					case "/view":
+						ViewHandler(context);
+						break;
+					default:
+						// no matching handler, render index
+						IndexHandler(context);
+						break;
+				}
+			} else { // else we have only specified the /plovr.net root
+				IndexHandler(context);
+			}
+		}
+
+		private void IndexHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void CompileHandler(HttpContext context) {
 			// get the project configuration and application settings
 			PlovrProject currentProject;
 			PlovrSettings currentSettings;
@@ -65,15 +120,50 @@ namespace Plovr.Modules
 
 			// if the mode isn't raw mode then we pass it off to the compiler, 
 			// if it is raw mode then we handle it on our own
-			if (currentProject.Mode == ClosureCompilerMode.Raw)
-			{
+			if (currentProject.Mode == ClosureCompilerMode.Raw) {
 				ShowRawMode(context, builder);
 			}
-			else
-			{
+			else {
 				RunClosureCompiler(context, builder);
 			}
 		}
+
+		private void ConfigHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void ExternsHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void InputHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void ListHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void ModuleHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void ModulesHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void SizeHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void SourcemapHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
+		private void ViewHandler(HttpContext context) {
+			throw new NotImplementedException();
+		}
+
 
 		/// <summary>
 		/// Run the closure compiler.
