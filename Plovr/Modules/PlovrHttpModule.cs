@@ -1,16 +1,4 @@
-﻿// Copyright 2011 Ogilvy & Mather. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -19,12 +7,13 @@ using System.Web;
 using Newtonsoft.Json;
 using Plovr.Builders;
 using Plovr.Configuration;
-using Plovr.Model;
 using Plovr.Helpers;
+using Plovr.Model;
 
-namespace Plovr.Handlers
+namespace Plovr.Modules
 {
-	public class RequestHandler : IHttpHandler
+	// http://code.google.com/p/plovr/source/browse/src/org/plovr/AbstractGetHandler.java
+	class PlovrHttpModule : IHttpModule
 	{
 		/// <summary>
 		/// the id key in the query string
@@ -40,15 +29,31 @@ namespace Plovr.Handlers
 		/// the resource id of the JavaScript loader.
 		/// </summary>
 		private const string PlovrJavaScriptLoaderResourceId = "Plovr.JavaScript.ScriptLoader.js";
-		
+
 		private const string PlovrJavaScriptMessageSystemResourceId = "Plovr.JavaScript.MessageSystem.js";
 
 		/// <summary>
-		/// The start of the Plovr handler request.
+		/// Register this module so that it listens on every Http Request.
 		/// </summary>
-		/// <param name="context">the current HttpContext</param>
-		public void ProcessRequest(HttpContext context)
+		/// <param name="context"></param>
+		public void Init(HttpApplication context)
 		{
+			context.BeginRequest += BeginRequest;
+		}
+
+		/// <summary>
+		/// An event listener, this will fire whenever a request has started. If we contain /plovr in the URL, 
+		/// then we handle the entire request.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
+		public void BeginRequest(object sender, EventArgs eventArgs)
+		{
+			var context = HttpContext.Current;
+
+			if (!context.Request.RawUrl.ToLower().StartsWith("/plovr.net")) return;
+
+			// TODO: support all command_names from Plovr, @see http://code.google.com/p/plovr/source/browse/src/org/plovr/Handler.java 
 
 			// get the project configuration and application settings
 			PlovrProject currentProject;
@@ -58,30 +63,16 @@ namespace Plovr.Handlers
 			// create our new builder
 			DependencyBuilder builder = new DependencyBuilder(currentProject, currentSettings);
 
-			if (ShouldLoadFireBugLight(context))
+			// if the mode isn't raw mode then we pass it off to the compiler, 
+			// if it is raw mode then we handle it on our own
+			if (currentProject.Mode == ClosureCompilerMode.Raw)
 			{
-				var firebugLightCode = ResourceHelper.GetTextResourceById("Plovr.JavaScript.FirebugLite.js");
-
-				ShowResponse(context, firebugLightCode);
+				ShowRawMode(context, builder);
 			}
 			else
 			{
-				// if the mode isn't raw mode then we pass it off to the compiler, 
-				// if it is raw mode then we handle it on our own
-				if (currentProject.Mode == ClosureCompilerMode.Raw)
-				{
-					ShowRawMode(context, builder);
-				}
-				else
-				{
-					RunClosureCompiler(context, builder);
-				}
+				RunClosureCompiler(context, builder);
 			}
-		}
-
-		private bool ShouldLoadFireBugLight(HttpContext context)
-		{
-			return context.Request.QueryString.AllKeys.Contains("firebugLite");
 		}
 
 		/// <summary>
@@ -112,10 +103,11 @@ namespace Plovr.Handlers
 
 			PlovrConfiguration.GetStrongTypedConfig(out currentSettings, out currentProject, id);
 
+			// support %JAVA_HOME% env variable
 			currentSettings.JavaPath = PathHelpers.ResolveJavaPath(currentSettings.JavaPath);
 
 			// override the mode from the querystring if its passed
-			currentProject.Mode = GetModeFromQueryString(context) ?? currentProject.Mode;
+			currentProject.Mode = this.GetModeFromQueryString(context) ?? currentProject.Mode;
 
 			// reformat the base paths so we have full paths
 			currentProject.BasePaths = currentProject.BasePaths.Select(context.Server.MapPath);
@@ -149,11 +141,12 @@ namespace Plovr.Handlers
 		private void ShowResponse(HttpContext context, string output)
 		{
 			context.Response.ContentType = "application/x-javascript";
-			
+
 			string includePath = context.Request.Url.PathAndQuery;
 			output = output.Replace("%INCLUDE_PATH%", includePath);
 
 			context.Response.Write(output);
+			context.Response.End();
 		}
 
 		/// <summary>
@@ -161,14 +154,13 @@ namespace Plovr.Handlers
 		/// output and error responses.
 		/// </summary>
 		/// <param name="context">the current HttpContext</param>
-		/// <param name="id">the id of the project that was built</param>
 		/// <param name="output">the output received from the compiler.</param>
 		/// <param name="errorOutput">the error messages received from the compiler.</param>
 		/// <param name="rawError"></param>
 		private void ShowResponse(HttpContext context, string output, List<ClosureCompilerMessage> errorOutput, string rawError)
 		{
 			var allOutput = new StringBuilder();
-			
+
 			if (errorOutput != null && errorOutput.Count > 0)
 			{
 				string jsonMessages = ToJson(errorOutput);
@@ -201,7 +193,7 @@ namespace Plovr.Handlers
 		private string GetIdFromQueryString(HttpContext context)
 		{
 			NameValueCollection queryString = context.Request.QueryString;
-			if( queryString.AllKeys.Contains(IdQueryStringParam) )
+			if (queryString.AllKeys.Contains(IdQueryStringParam))
 			{
 				return queryString[IdQueryStringParam];
 			}
@@ -220,12 +212,17 @@ namespace Plovr.Handlers
 			return null;
 		}
 
-		/// <summary>
-		/// I think we can reuse this? I haven't had a problem yet.
-		/// </summary>
-		public bool IsReusable
+		void context_BeginRequest(object sender, System.EventArgs e)
 		{
-			get { return true; }
+			var context = HttpContext.Current;
+			if (context.Request.RawUrl.StartsWith("/plovr/"))
+			{
+				context.Response.ContentType = "text/html";
+				context.Response.Write("I'm Here");
+				context.Response.End();
+			}
 		}
+
+		public void Dispose() { }
 	}
 }

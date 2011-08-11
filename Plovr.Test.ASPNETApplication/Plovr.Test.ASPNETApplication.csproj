@@ -51,6 +51,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AUTHORS" />
     <Content Include="css\closure\autocomplete.css" />
     <Content Include="css\closure\bubble.css" />
     <Content Include="css\closure\button.css" />
