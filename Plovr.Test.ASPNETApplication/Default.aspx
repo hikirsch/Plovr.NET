@@ -16,10 +16,10 @@
 		<script src="<%= Plovr.Utilities.GetIncludePath() %>"></script>
 
 		<!-- include the jquery test via passing an id into plovr, you can also pass mode -->
-		<script src="/plovr/compile?id=test-jquery&mode=advanced"></script>
+		<script src="/plovr.net/compile?id=test-jquery&mode=advanced"></script>
 
 		<!-- how you pass an id -->
-		<script src="/plovr/compile?id=test-tooltip&mode=advanced"></script>
+		<script src="/plovr.net/compile?id=test-tooltip&mode=advanced"></script>
 
 <%--		<script src="/plovr.axd?id=plovr-MessageSystem"></script> --%>
 	</body>
