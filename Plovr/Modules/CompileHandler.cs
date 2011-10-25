@@ -73,7 +73,7 @@ namespace Plovr.Modules
 			foreach (string basePath in currentProject.BasePaths) {
 				if (fullPath.StartsWith(basePath)) {
 					string relativeToBasePath = fullPath.Substring(basePath.Length+1);
-					string inputPath = "/plovr.net/input/test-jquery/" + relativeToBasePath.Replace("\\", "/"); // TODO: more elegant way to convert backslashes
+					string inputPath = "/plovr.net/input/" + currentProject.Id + "/" + relativeToBasePath.Replace("\\", "/"); // TODO: more elegant way to convert backslashes
 					return inputPath;
 				}
 			}

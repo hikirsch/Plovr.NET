@@ -93,7 +93,7 @@ namespace Plovr.Modules
 		/// The ID can be passed from the QueryString to override the DefaultProject flag.
 		/// </summary>
 		/// <remarks>Override in subclasses if you need to get it from path instead of QueryString</remarks>
-		protected string GetIdFromUri() {
+		protected virtual string GetIdFromUri() {
 			NameValueCollection queryString = context.Request.QueryString;
 			if (queryString.AllKeys.Contains(IdQueryStringParam)) {
 				return queryString[IdQueryStringParam];
