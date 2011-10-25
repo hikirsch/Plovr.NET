@@ -52,7 +52,7 @@ namespace Plovr.Modules
 		/// <param name="builder">the builder</param>
 		private void ShowRawMode(DependencyBuilder builder) {
 			// get all the dependencies and reformat the paths for URLs on the site.
-			IEnumerable<string> urlDependencies = builder.GetDependencies().Select(PathHelpers.MakeRelativeFromPath);
+			IEnumerable<string> urlDependencies = builder.GetDependencies().Select(ResolveInputPath);
 			string dependencyCsv = string.Join("', '", urlDependencies.ToArray());
 
 			// grab the javascript embedded resource.
@@ -61,6 +61,24 @@ namespace Plovr.Modules
 			plovrJavaScriptIncluder = plovrJavaScriptIncluder.Replace("%FILES%", dependencyCsv);
 
 			ShowResponse(plovrJavaScriptIncluder, null, string.Empty);
+		}
+
+
+		/// <summary>
+		/// Pass a full path and convert it to an input handler path
+		/// </summary>
+		/// <param name="fullPath">the full path to convert</param>
+		/// <returns>the url of the input handler</returns>
+		private string ResolveInputPath(string fullPath) {
+			foreach (string basePath in currentProject.BasePaths) {
+				if (fullPath.StartsWith(basePath)) {
+					string relativeToBasePath = fullPath.Substring(basePath.Length+1);
+					string inputPath = "/plovr.net/input/test-jquery/" + relativeToBasePath.Replace("\\", "/"); // TODO: more elegant way to convert backslashes
+					return inputPath;
+				}
+			}
+
+			throw new Exception("Matching base path not found.  Cannot resolve input path from full path.");
 		}
 	}
 }

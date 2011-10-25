@@ -68,6 +68,7 @@
     <Compile Include="Modules\ConfigHandler.cs" />
     <Compile Include="Modules\Handler.cs" />
     <Compile Include="Modules\IndexHandler.cs" />
+    <Compile Include="Modules\InputHandler.cs" />
     <Compile Include="Modules\PlovrHttpModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />

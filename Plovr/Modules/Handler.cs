@@ -90,6 +90,20 @@ namespace Plovr.Modules
 		}
 
 		/// <summary>
+		/// The ID can be passed from the QueryString to override the DefaultProject flag.
+		/// </summary>
+		/// <remarks>Override in subclasses if you need to get it from path instead of QueryString</remarks>
+		protected string GetIdFromUri() {
+			NameValueCollection queryString = context.Request.QueryString;
+			if (queryString.AllKeys.Contains(IdQueryStringParam)) {
+				return queryString[IdQueryStringParam];
+			}
+
+			return null;
+		}
+
+
+		/// <summary>
 		/// Using the HttpContext as the current website that is loaded, load the current project and settings.
 		/// </summary>
 		/// <param name="context">the current HttpContext</param>
@@ -97,7 +111,7 @@ namespace Plovr.Modules
 		/// <param name="currentSettings">the settings param to be set</param>
 		private void GetActiveProjectAndSettings(out PlovrProject currentProject, out PlovrSettings currentSettings) {
 			// get the id from the QueryString
-			var id = GetIdFromQueryString();
+			var id = GetIdFromUri();
 
 			PlovrConfiguration.GetStrongTypedConfig(out currentSettings, out currentProject, id);
 
@@ -113,20 +127,6 @@ namespace Plovr.Modules
 			if (currentProject.Externs != null) {
 				currentProject.Externs = currentProject.Externs.Select(context.Server.MapPath);
 			}
-		}
-
-		/// <summary>
-		/// The ID can be passed from the QueryString to override the DefaultProject flag.
-		/// </summary>
-		/// <param name="context"></param>
-		/// <returns></returns>
-		private string GetIdFromQueryString() {
-			NameValueCollection queryString = context.Request.QueryString;
-			if (queryString.AllKeys.Contains(IdQueryStringParam)) {
-				return queryString[IdQueryStringParam];
-			}
-
-			return null;
 		}
 
 		private ClosureCompilerMode? GetModeFromQueryString() {
