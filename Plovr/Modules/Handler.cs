@@ -50,7 +50,7 @@ namespace Plovr.Modules
 			this.GetActiveProjectAndSettings(out currentProject, out currentSettings);
 		}
 
-		protected void ShowResponse(string output) {
+		protected virtual void ShowResponse(string output) {
 			context.Response.ContentType = "application/x-javascript";
 
 			string includePath = context.Request.Url.PathAndQuery;

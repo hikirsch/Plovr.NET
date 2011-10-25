@@ -23,10 +23,15 @@ namespace Plovr.Modules
 			foreach (string basePath in currentProject.BasePaths) {
 				string fullFilePath = basePath + relFilePath;
 				if (File.Exists(fullFilePath)) {
-					context.Response.WriteFile(fullFilePath);
-					context.Response.Flush();
+					ShowResponse(fullFilePath);
 				}
 			}
+		}
+
+		protected override void ShowResponse(string file) {
+			context.Response.ContentType = "application/x-javascript";
+			context.Response.WriteFile(file);
+			context.Response.End();
 		}
 
 		/// <summary>
