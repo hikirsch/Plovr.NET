@@ -17,6 +17,7 @@ namespace Plovr.Model
 {
 	public class PlovrProject : IPlovrProject
 	{
+		public string Id { get; set; }
 		public IEnumerable<string> BasePaths { get; set; }
 		public IEnumerable<string> Namespaces { get; set; }
 		public IEnumerable<string> Externs { get; set; }

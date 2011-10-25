@@ -60,9 +60,11 @@ namespace Plovr.Configuration
 
 			settings = Mappers.ToPlovrSettings(plovrConfiguration.Settings, HttpContext.Current.Server.MapPath("~"));
 
-			project = Mappers.ToPlovrProject(string.IsNullOrEmpty(id)
-			    ? plovrConfiguration.ProjectsElement.DefaultProjectElement
-			    : plovrConfiguration.ProjectsElement.GetProjectById(id));
+			project = Mappers.ToPlovrProject(
+				string.IsNullOrEmpty(id)
+					? plovrConfiguration.ProjectsElement.DefaultProjectElement
+					: plovrConfiguration.ProjectsElement.GetProjectById(id)
+			);
 		}
     }
 }

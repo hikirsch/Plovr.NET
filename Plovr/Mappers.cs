@@ -31,6 +31,7 @@ namespace Plovr
 		{
 			var project = new PlovrProject
 			    {
+					Id = element.Id,
 			        BasePaths = ConvertStringToList(element.BasePath),
 			        Externs = ConvertStringToList(element.ClosureExternFilesRaw),
 					Mode = MapToEnum<ClosureCompilerMode>(element.ModeRaw),
