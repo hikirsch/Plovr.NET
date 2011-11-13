@@ -17,6 +17,7 @@ namespace Plovr.Model
 	{
 		public string JavaPath { get; set; }
 		public string ClosureCompilerJarPath { get; set; }
+		public string SoyToJsSrcCompilerJarPath { get; set; }
 		public string IncludePath { get; set; }
 	}
 }

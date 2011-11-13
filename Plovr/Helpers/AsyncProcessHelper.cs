@@ -49,6 +49,22 @@ namespace Plovr.Helpers
 		/// <returns>the exit code from the compiler</returns>
 		public int ExecuteJavaCommand(string exePath, string parameters, out ClosureCompilerOutput output)
 		{
+			string stringOutput;
+			string stringErrorOutput;
+			int exitCode = this.ExecuteJavaCommand(exePath, parameters, out stringOutput, out stringErrorOutput);
+
+			output = new ClosureCompilerOutput
+			         	{
+			         		StandardOutput = stringOutput.ToString(),
+			         		StandardError = stringErrorOutput.ToString(),
+			         		Messages = ParsePlovrMessages(stringErrorOutput.ToString())
+			         	};
+
+			return exitCode;
+		}
+
+		public int ExecuteJavaCommand(string exePath, string parameters, out string output, out string errorOutput)
+		{
 			int exitCode;
 
 			// create our new start info object with the exe and parameters
@@ -86,12 +102,8 @@ namespace Plovr.Helpers
 				}
 
 				// create our object to send back with all the output
-				output = new ClosureCompilerOutput
-					{
-						StandardOutput = ProcessOutput.ToString(),
-						StandardError = ProcessErrorOutput.ToString(),
-						Messages = ParsePlovrMessages(ProcessErrorOutput.ToString())
-					};
+				output = ProcessOutput.ToString();
+				errorOutput = ProcessErrorOutput.ToString();
 
 				// reset them back to null since we got them already.z
 				ProcessErrorOutput = null;
@@ -101,6 +113,7 @@ namespace Plovr.Helpers
 			{
 				throw new Win32Exception(e.Message + "\n" + "EXE Path: '" + exePath + "'\nParams: '" + parameters + "'");
 			}
+
 			return exitCode;
 		}
 

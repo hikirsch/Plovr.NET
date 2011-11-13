@@ -16,13 +16,14 @@ using System.Collections.Generic;
 namespace Plovr.Model
 {
 	public class PlovrProject : IPlovrProject
-	{
+	{		
 		public string Id { get; set; }
 		public IEnumerable<string> BasePaths { get; set; }
 		public IEnumerable<string> Namespaces { get; set; }
 		public IEnumerable<string> Externs { get; set; }
 		public ClosureCompilerMode? Mode { get; set; }
 		public string OutputFile { get; set; }
-		public string CustomParams { get; set; }
+		public string CompilerCustomParams { get; set; }
+		public string SoyCustomParams { get; set;  }
 	}
 }

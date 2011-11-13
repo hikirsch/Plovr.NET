@@ -41,6 +41,11 @@ namespace Plovr.Builders
 		private const string JavascriptFunctionCallWithParam = @"{0}\s*\(\s*'([^']+)'\s*\)|{0}\s*\(\s*""([^""]+)""\s*\)";
 
 		/// <summary>
+		/// matches a string's value in a soy namespace declare called, used for detecting a namespace inside {namespace some.namespace}
+		/// </summary>
+		private const string SoyNamespaceRegEx = @"{{namespace\s*(.*)}}";
+
+		/// <summary>
 		/// The path to where the namespace and require methods are defined. Base.js is the core to the entire framework. It must always be here.
 		/// </summary>
 		private const string PathToBaseJS = @"\goog\base.js";
@@ -104,7 +109,11 @@ namespace Plovr.Builders
 		{
 			foreach (string path in this.Project.BasePaths)
 			{
-				BuildDepedencyTree(path);
+				// get all the JS depedencies
+				BuildDepedencyTree(path, "*.JS", GetDetailsFromJsFilePath, JavascriptFunctionCallWithParam);
+
+				// get all the soy dependencies
+				BuildDepedencyTree(path, "*.SOY", GetDetailsFromJsFilePath, SoyNamespaceRegEx);
 			}
 		}
 
@@ -112,20 +121,22 @@ namespace Plovr.Builders
 		/// Scan the directory passed and build the dependency tree.
 		/// </summary>
 		/// <param name="currentPath">the path to start scanning</param>
-		private void BuildDepedencyTree(string currentPath)
+		/// <param name="filePattern"></param>
+		/// <param name="getDetailsFromJsFilePath"></param>
+		private void BuildDepedencyTree(string currentPath, string filePattern, Action<string, string> getDetailsFromJsFilePath, string regex)
 		{
 			// recurse through all the directories
 			var currentDirectories = Directory.GetDirectories(currentPath);
 			foreach (var directory in currentDirectories)
 			{
-				BuildDepedencyTree(directory);
+				BuildDepedencyTree(directory, filePattern, getDetailsFromJsFilePath,regex);
 			}
 
 			// list all the JS files in this folder we don't care about any of the others.
-			var currentFiles = Directory.GetFiles(currentPath, "*.JS");
+			var currentFiles = Directory.GetFiles(currentPath, filePattern);
 			foreach (var currentFile in currentFiles)
 			{
-				GetDetailsFromFilePath(currentFile);
+				getDetailsFromJsFilePath.DynamicInvoke(currentFile, regex);
 			}
 		}
 
@@ -133,8 +144,10 @@ namespace Plovr.Builders
 		/// Parse the dependency tree info from the passed in file.
 		/// </summary>
 		/// <param name="filePath">a file to parse</param>
-		private void GetDetailsFromFilePath(string filePath)
+		/// <param name="regex">the regex to use to find the namespace</param>
+		private void GetDetailsFromJsFilePath(string filePath, string regex)
 		{
+			if (regex == null) throw new ArgumentNullException("regex");
 			var contents = this.GetFileContentsWithoutJavaScriptComments(filePath);
 
 			// this exception should never happen but nonetheless, here it is.
@@ -149,7 +162,7 @@ namespace Plovr.Builders
 			// Handle the provides. (GoogProvide)
 			////////////////////////////////////////////////
 			// setup our pattern, this replace allows me to maintain the require and provide statements without worrying about the syntax of a regex
-			var providePattern = string.Format(JavascriptFunctionCallWithParam, GoogProvide.Replace(".", @"\."));
+			var providePattern = string.Format(regex, GoogProvide.Replace(".", @"\."));
 			MatchCollection provideMatch = Regex.Matches(contents, providePattern);
 			if (provideMatch.Count > 0)
 			{
@@ -322,9 +335,9 @@ namespace Plovr.Builders
 			}
 
 			// set any other closure compiler options
-			if (!string.IsNullOrEmpty(this.Project.CustomParams))
+			if (!string.IsNullOrEmpty(this.Project.CompilerCustomParams))
 			{
-				builder.AddRawOptions(Project.CustomParams);
+				builder.AddRawOptions(Project.CompilerCustomParams);
 			}
 
 			// set the output file
@@ -338,6 +351,16 @@ namespace Plovr.Builders
 
 			// return all the params
 			return builder.GetParams();
+		}
+
+		#endregion
+
+		#region "Closure Templates Integration"
+		public int CompileSoyTemplate(string file, out string output, string errorOutput)
+		{
+			var closureParams = this.BuildClosureCompilerParameters();
+
+			return ProcessHelper.ExecuteJavaCommand(this.Settings.JavaPath, closureParams, out output, out errorOutput);
 		}
 
 		#endregion

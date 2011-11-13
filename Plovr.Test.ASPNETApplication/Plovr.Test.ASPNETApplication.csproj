@@ -1621,12 +1621,15 @@
     <Content Include="js\jquery-1.6.1-externs.js" />
     <Content Include="js\jquery-1.6.2.min.js" />
     <Content Include="js\oiny\events\DomReady.js" />
+    <Content Include="js\soy\soyutils_usegoog.js" />
+    <Content Include="js\tests\test.SoyTemplate.js" />
     <Content Include="js\tests\test.AnotherTest.js" />
     <Content Include="js\tests\test.Calendar.js" />
     <Content Include="js\tests\test.jQuery.js" />
     <Content Include="js\plovr\MessageSystem.js" />
     <Content Include="js\tests\test.SayHi.js" />
     <Content Include="js\tests\test.ToolTip.js" />
+    <None Include="js\tests\test.SoyTemplate.Test1.soy" />
     <None Include="LICENSE" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -23,7 +23,19 @@ namespace Plovr.Modules
 			foreach (string basePath in currentProject.BasePaths) {
 				string fullFilePath = basePath + relFilePath;
 				if (File.Exists(fullFilePath)) {
-					ShowResponse(fullFilePath);
+					if (fullFilePath.EndsWith(".soy"))
+					{
+						string plovrSoyContents = string.Empty;
+						var closureTemplateRunner = new ClosureTemplateRunner(this.currentSettings, this.currentProject);
+						int returnCode = closureTemplateRunner.Compile(fullFilePath, plovrSoyContents);
+						context.Response.Write(plovrSoyContents);
+						context.Response.Write("DONE");
+						context.Response.End();
+					}
+					else
+					{
+						ShowResponse(fullFilePath);
+					}
 				}
 			}
 		}

@@ -32,6 +32,12 @@ namespace Plovr.Configuration
 			set { throw new System.NotImplementedException(); }
 		}
 
+		[ConfigurationProperty("soyToJsSrcCompilerJarPath", IsRequired = true)]
+		public string SoyToJsSrcCompilerJarPath
+		{
+			get { return (string) this["soyToJsSrcCompilerJarPath"]; }
+		}
+
 		[ConfigurationProperty("includePath", IsRequired = true)]
 		public string IncludePath
 		{

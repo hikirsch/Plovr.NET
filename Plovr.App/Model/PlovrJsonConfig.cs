@@ -25,7 +25,10 @@ namespace Plovr.App.Model
 		[JsonProperty("outputFile")]
 		public string OutputFile { get; set; }
 
-		[JsonProperty("customParams")]
-		public string CustomParams { get; set; }
+		[JsonProperty("compilerCustomParams")]
+		public string CompilerCustomParams { get; set; }
+
+		[JsonProperty("soyCustomParams")]
+		public string SoyCustomParams { get; set; }
 	}
 }

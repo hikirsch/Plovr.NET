@@ -25,6 +25,7 @@ namespace Plovr.Model
 		IEnumerable<string> Externs { get; set; }
 		ClosureCompilerMode? Mode { get; set; }
 		string OutputFile { get; set; }
-		string CustomParams { get; set; }
+		string CompilerCustomParams { get; set; }
+		string SoyCustomParams { get; set; }
 	}
 }

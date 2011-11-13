@@ -16,7 +16,7 @@ using Plovr.Model;
 
 namespace Plovr.Builders
 {
-	public class ClosureCompilerParamBuilder
+	public class ClosureCompilerParamBuilder : JavaJarParamBuilder
 	{
 		/// <summary>
 		/// All the params
@@ -27,11 +27,7 @@ namespace Plovr.Builders
 		/// Create a new Closure Compiler Param Builder. You must pass the path where the closure jar is.
 		/// </summary>
 		/// <param name="pathToJar"></param>
-		public ClosureCompilerParamBuilder(string pathToJar)
-		{
-			Params = new StringBuilder();
-			Params.Append("-jar \"" + pathToJar + "\" ");
-		}
+		public ClosureCompilerParamBuilder(string pathToJar) : base(pathToJar) { }
 
 		#region "Closure Params"
 
@@ -93,61 +89,6 @@ namespace Plovr.Builders
 		public void AddOutputFile(string outputFile)
 		{
 			this.AddParamQuotedValue("js_output_file", outputFile);
-		}
-
-		#endregion
-
-		#region "Other Methods"
-		/// <summary>
-		/// Add any raw options directly to the param list. This must be properly formatted.
-		/// </summary>
-		/// <param name="closureCompilerOptions"></param>
-		public void AddRawOptions(string closureCompilerOptions)
-		{
-			Params.Append(closureCompilerOptions);
-
-			// we add a space to ensure any other params added are separated.
-			Params.Append(" ");
-		}
-
-		/// <summary>
-		/// Build the params and return the string.
-		/// </summary>
-		/// <returns>a string of all the arguments</returns>
-		public string GetParams()
-		{
-			return Params.ToString();
-		}
-
-		#endregion
-
-		#region "Utilities"
-
-		/// <summary>
-		/// Add a param to the parm list, this is a helper function to handle the syntax of the closure compiler param list. The
-		/// jar takes the format of --option value. This is a shorthand method to help with this.
-		/// </summary>
-		/// <param name="paramName">the param key</param>
-		/// <param name="paramValue">the param value</param>
-		public void AddParam(string paramName, string paramValue)
-		{
-			if (paramValue.Length > 0)
-			{
-				Params.Append("--" + paramName + " " + paramValue + " ");
-			}
-		}
-
-		/// <summary>
-		/// Same as AddParam but we quote the value being passed, e.g. --js "D:\path\to\include.js"
-		/// </summary>
-		/// <param name="paramName">the param key</param>
-		/// <param name="paramValue">the param value</param>
-		public void AddParamQuotedValue(string paramName, string paramValue)
-		{
-			if (paramValue.Length > 0)
-			{
-				this.AddParam(paramName, "\"" + paramValue + "\"");
-			}
 		}
 
 		#endregion

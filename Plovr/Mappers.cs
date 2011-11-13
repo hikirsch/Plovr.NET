@@ -36,7 +36,8 @@ namespace Plovr
 			        Externs = ConvertStringToList(element.ClosureExternFilesRaw),
 					Mode = MapToEnum<ClosureCompilerMode>(element.ModeRaw),
 			        Namespaces = ConvertStringToList(element.AllNamespaces),
-					CustomParams = element.CustomParams
+					CompilerCustomParams = element.CompilerCustomParams,
+					SoyCustomParams = element.SoyCustomParams
 			    };
 
 			return project;
@@ -51,11 +52,12 @@ namespace Plovr
 		public static PlovrSettings ToPlovrSettings(PlovrSettingsElement element, string basePath)
 		{
 			var settings = new PlovrSettings
-			    {
-			        ClosureCompilerJarPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.ClosureCompilerJarPath, basePath),
-			        IncludePath = element.IncludePath,
+				{
+					ClosureCompilerJarPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.ClosureCompilerJarPath, basePath),
+					SoyToJsSrcCompilerJarPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.SoyToJsSrcCompilerJarPath, basePath),
+					IncludePath = element.IncludePath,
 					JavaPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.JavaPath, basePath)
-			    };
+				};
 
 			return settings;
 		}

@@ -20,6 +20,7 @@ namespace Plovr.Model
 	{
 		string JavaPath { get; }
 		string ClosureCompilerJarPath { get; }
+		string SoyToJsSrcCompilerJarPath { get; }
 		string IncludePath { get; }
 	}
 }

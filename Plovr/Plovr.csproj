@@ -47,11 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\ClosureCompilerParamBuilder.cs" />
+    <Compile Include="Builders\JavaJarParamBuilder.cs" />
+    <Compile Include="Builders\SoyToJsSrcCompilerParamBuilder.cs" />
     <Compile Include="Configuration\PlovrConfiguration.cs" />
     <Compile Include="Configuration\PlovrProjectElement.cs" />
     <Compile Include="Configuration\PlovrProjectsElement.cs" />
     <Compile Include="Configuration\PlovrSettingsElement.cs" />
     <Compile Include="Builders\DependencyBuilder.cs" />
+    <Compile Include="Runners\ClosureTemplateRunner.cs" />
     <Compile Include="Model\ClosureCompilerMode.cs" />
     <Compile Include="Model\PlovrMessageType.cs" />
     <Compile Include="Helpers\AsyncProcessHelper.cs" />
@@ -75,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="compiler.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SoyToJsSrcCompiler.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="JavaScript\MessageSystem.js" />

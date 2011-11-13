@@ -65,10 +65,19 @@ namespace Plovr.Configuration
 		/// <summary>
 		/// Any custom param that this tool may not support yet but is supported in the compiler.
 		/// </summary>
-		[ConfigurationProperty("customParams")]
-		public string CustomParams
+		[ConfigurationProperty("compilerCustomParams")]
+		public string CompilerCustomParams
 		{
-			get { return (string) this["customParams"]; }
+			get { return (string)this["compilerCustomParams"]; }
+		}
+
+		/// <summary>
+		/// Any custom param that this tool may not support yet but is supported in the compiler.
+		/// </summary>
+		[ConfigurationProperty("compilerCustomParams")]
+		public string SoyCustomParams
+		{
+			get { return (string)this["soyCustomParams"]; }
 		}
 	}
 }
