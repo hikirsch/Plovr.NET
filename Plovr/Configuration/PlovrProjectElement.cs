@@ -74,7 +74,7 @@ namespace Plovr.Configuration
 		/// <summary>
 		/// Any custom param that this tool may not support yet but is supported in the compiler.
 		/// </summary>
-		[ConfigurationProperty("compilerCustomParams")]
+		[ConfigurationProperty("soyCustomParams", IsRequired = false)]
 		public string SoyCustomParams
 		{
 			get { return (string)this["soyCustomParams"]; }

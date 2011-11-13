@@ -16,7 +16,7 @@ using Plovr.Model;
 
 namespace Plovr.Builders
 {
-	public class ClosureCompilerParamBuilder : JavaJarParamBuilder
+	internal class ClosureCompilerParamBuilder : JavaJarParamBuilder
 	{
 		/// <summary>
 		/// All the params

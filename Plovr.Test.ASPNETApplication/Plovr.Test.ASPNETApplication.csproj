@@ -1629,6 +1629,7 @@
     <Content Include="js\plovr\MessageSystem.js" />
     <Content Include="js\tests\test.SayHi.js" />
     <Content Include="js\tests\test.ToolTip.js" />
+    <None Include="js\tests\Site.soy" />
     <None Include="js\tests\test.SoyTemplate.Test1.soy" />
     <None Include="LICENSE" />
     <Content Include="Web.config">

@@ -1,15 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.IO;
 using System.Text.RegularExpressions;
-using System.Linq;
-using System.Text;
 using System.Web;
-using Plovr.Builders;
-using Plovr.Configuration;
-using Plovr.Helpers;
-using Plovr.Model;
+using Plovr.Runners;
 
 namespace Plovr.Modules
 {
@@ -25,11 +17,20 @@ namespace Plovr.Modules
 				if (File.Exists(fullFilePath)) {
 					if (fullFilePath.EndsWith(".soy"))
 					{
-						string plovrSoyContents = string.Empty;
+						string plovrSoyContents;
+						string output;
+						string errorOutput;
+
 						var closureTemplateRunner = new ClosureTemplateRunner(this.currentSettings, this.currentProject);
-						int returnCode = closureTemplateRunner.Compile(fullFilePath, plovrSoyContents);
+						closureTemplateRunner.Compile(fullFilePath, out plovrSoyContents, out output, out errorOutput);
+
 						context.Response.Write(plovrSoyContents);
-						context.Response.Write("DONE");
+//						context.Response.Write("\n/*");
+//						context.Response.Write("=================================================\n");
+//						context.Response.Write(output);
+//						context.Response.Write("\n=================================================\n");
+//						context.Response.Write(errorOutput);
+//						context.Response.Write("\n*/");
 						context.Response.End();
 					}
 					else

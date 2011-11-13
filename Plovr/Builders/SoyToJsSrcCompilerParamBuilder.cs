@@ -11,10 +11,35 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using System.IO;
+
 namespace Plovr.Builders
 {
-	class SoyToJsSrcCompilerParamBuilder : JavaJarParamBuilder
+	internal class SoyToJsSrcCompilerParamBuilder : JavaJarParamBuilder
 	{
+		internal string TempFilePath { get; set; }
+
 		public SoyToJsSrcCompilerParamBuilder(string jarPath) : base(jarPath) { }
+
+		public void AddOutputFilePathFormat(string filePath)
+		{
+			this.AddParamQuotedValue("outputPathFormat", filePath);
+		}
+
+		public void AddFileToCompile( string filePath )
+		{
+			this.Params.Append(" " + "\"" + filePath + "\"");
+		}
+
+		public void AddCodeStyle(string codeStyle)
+		{
+			this.AddParamQuotedValue("codeStyle", codeStyle);
+		}
+
+		public void ShouldGenerateJsDoc()
+		{
+			this.AddParam("shouldGenerateJsdoc");
+		}
 	}
 }

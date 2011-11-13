@@ -15,9 +15,9 @@ using System.Text;
 
 namespace Plovr.Builders
 {
-	public class JavaJarParamBuilder
+	internal class JavaJarParamBuilder
 	{
-		private StringBuilder Params { get; set; }
+		protected StringBuilder Params { get; set; }
 
 		public JavaJarParamBuilder(string jarPath)
 		{
@@ -31,11 +31,13 @@ namespace Plovr.Builders
 		/// </summary>
 		/// <param name="paramName">the param key</param>
 		/// <param name="paramValue">the param value</param>
-		public void AddParam(string paramName, string paramValue)
+		public void AddParam(string paramName, string paramValue = null)
 		{
-			if (paramValue.Length > 0)
+			Params.Append("--" + paramName + " ");
+
+			if (!string.IsNullOrEmpty(paramValue))
 			{
-				Params.Append("--" + paramName + " " + paramValue + " ");
+				Params.Append(paramValue + " ");
 			}
 		}
 

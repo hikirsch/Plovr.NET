@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using Plovr.Builders;
+using Plovr.Helpers;
 using Plovr.Model;
 
-namespace Plovr.Helpers
+namespace Plovr.Runners
 {
-	class ClosureTemplateRunner
+	internal class ClosureTemplateRunner
 	{
+		private const string PARAM_USE_GOOG_REQUIRE_PROVIDE = "shouldProvideRequireSoyNamespaces";
 		private PlovrProject Project { get; set; }
 		private PlovrSettings Settings { get; set; }
 		private AsyncProcessHelper ProcessHelper { get; set; }
-
 
 		public ClosureTemplateRunner(PlovrSettings settings, PlovrProject project)
 		{
@@ -22,11 +20,11 @@ namespace Plovr.Helpers
 		}
 
 		/// <summary>
-		/// Taking a list of dependencies, use the ClosureComiplerParamBuilder to build out all the command arguments we need
-		/// to execute the jar.
+		/// Using the SoyToJsSrcCompilerParamBuilder, build up all the params so we can pass this to the AsyncProcessHelper.
 		/// </summary>
-		/// <returns>all the params as a single string, ready to be executed and pass to the java executable</returns>
-		private string BuildClosureCompilerParameters(string filePath)
+		/// <param name="filePath"></param>
+		/// <returns>all the params as a single string, ready to be executed and passed to the java executable</returns>
+		private string BuildParams(string filePath, string tempFilePath)
 		{
 			SoyToJsSrcCompilerParamBuilder builder = new SoyToJsSrcCompilerParamBuilder(this.Settings.SoyToJsSrcCompilerJarPath);
 
@@ -36,17 +34,47 @@ namespace Plovr.Helpers
 				builder.AddRawOptions(Project.CompilerCustomParams);
 			}
 
+			builder.AddCodeStyle("concat");
+			builder.ShouldGenerateJsDoc();
+
+			builder.AddOutputFilePathFormat(tempFilePath);
+
+			// since this is plovr, we are going to be providing goog.base anyway, so we can use goog.require statements here
+			builder.AddParamQuotedValue(PARAM_USE_GOOG_REQUIRE_PROVIDE, "true");
+
+			builder.AddFileToCompile(filePath);
+
 			// return all the params
 			return builder.GetParams();
 		}
 
-		public int Compile(string filePath, string plovrSoyContents)
+		/// <summary>
+		/// Run the SoyToJsSrc Compiler. Unfortunately, this compiler saves the output to a file. So we ask .NET to give use
+		/// a temporary file, run it, get the contents and then delete it.
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="plovrSoyContents"></param>
+		/// <param name="outputString"></param>
+		/// <param name="errorStringOutput"></param>
+		/// <returns></returns>
+		public int Compile(string filePath, out string plovrSoyContents, out string outputString, out string errorStringOutput)
 		{
-			string errorStringOutput = string.Empty;
-			string stringOutput = string.Empty;
-			string parameters = this.BuildClosureCompilerParameters(filePath);
+			string tempFilePath = Path.GetTempFileName();
+			string parameters = this.BuildParams(filePath, tempFilePath);
 
-			return ProcessHelper.ExecuteJavaCommand(this.Settings.JavaPath, parameters, out stringOutput, out errorStringOutput);
+			int exitCode = ProcessHelper.ExecuteJavaCommand(
+				this.Settings.JavaPath,
+				parameters,
+				out outputString,
+				out errorStringOutput
+			);
+
+			plovrSoyContents = File.ReadAllText(tempFilePath);
+			File.Delete(tempFilePath);
+
+			outputString += "\n" + parameters + "\n===========================================\n";
+
+			return exitCode;
 		}
 	}
 }
