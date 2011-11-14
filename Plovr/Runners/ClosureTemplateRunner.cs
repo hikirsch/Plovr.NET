@@ -1,28 +1,20 @@
 ﻿using System.IO;
 using Plovr.Builders;
-using Plovr.Helpers;
 using Plovr.Model;
 
 namespace Plovr.Runners
 {
-	internal class ClosureTemplateRunner
+	public class ClosureTemplateRunner : BaseRunner
 	{
-		private const string PARAM_USE_GOOG_REQUIRE_PROVIDE = "shouldProvideRequireSoyNamespaces";
-		private PlovrProject Project { get; set; }
-		private PlovrSettings Settings { get; set; }
-		private AsyncProcessHelper ProcessHelper { get; set; }
+		private const string ParamUseGoogRequireProvide = "shouldProvideRequireSoyNamespaces";
 
-		public ClosureTemplateRunner(PlovrSettings settings, PlovrProject project)
-		{
-			this.Settings = settings;
-			this.Project = project;
-			ProcessHelper = new AsyncProcessHelper();
-		}
+		public ClosureTemplateRunner(IPlovrSettings settings, IPlovrProject project) : base(settings, project) { }
 
 		/// <summary>
 		/// Using the SoyToJsSrcCompilerParamBuilder, build up all the params so we can pass this to the AsyncProcessHelper.
 		/// </summary>
 		/// <param name="filePath"></param>
+		/// <param name="tempFilePath"></param>
 		/// <returns>all the params as a single string, ready to be executed and passed to the java executable</returns>
 		private string BuildParams(string filePath, string tempFilePath)
 		{
@@ -40,7 +32,7 @@ namespace Plovr.Runners
 			builder.AddOutputFilePathFormat(tempFilePath);
 
 			// since this is plovr, we are going to be providing goog.base anyway, so we can use goog.require statements here
-			builder.AddParamQuotedValue(PARAM_USE_GOOG_REQUIRE_PROVIDE, "true");
+			builder.AddParamQuotedValue(ParamUseGoogRequireProvide, "true");
 
 			builder.AddFileToCompile(filePath);
 
@@ -57,9 +49,20 @@ namespace Plovr.Runners
 		/// <param name="outputString"></param>
 		/// <param name="errorStringOutput"></param>
 		/// <returns></returns>
-		public int Compile(string filePath, out string plovrSoyContents, out string outputString, out string errorStringOutput)
+		public int GetCompile(string filePath, out string plovrSoyContents, out string outputString, out string errorStringOutput)
 		{
-			string tempFilePath = Path.GetTempFileName();
+			string tempFilePath;
+
+			int exitCode = this.Compile(filePath, out tempFilePath, out outputString, out errorStringOutput);
+			plovrSoyContents = File.ReadAllText(tempFilePath);
+			File.Delete(tempFilePath);
+
+			return exitCode;
+		}
+
+		public int Compile(string filePath, out string tempFilePath, out string outputString, out string errorStringOutput)
+		{
+			tempFilePath = Path.GetTempFileName();
 			string parameters = this.BuildParams(filePath, tempFilePath);
 
 			int exitCode = ProcessHelper.ExecuteJavaCommand(
@@ -68,11 +71,6 @@ namespace Plovr.Runners
 				out outputString,
 				out errorStringOutput
 			);
-
-			plovrSoyContents = File.ReadAllText(tempFilePath);
-			File.Delete(tempFilePath);
-
-			outputString += "\n" + parameters + "\n===========================================\n";
 
 			return exitCode;
 		}

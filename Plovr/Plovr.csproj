@@ -54,6 +54,8 @@
     <Compile Include="Configuration\PlovrProjectsElement.cs" />
     <Compile Include="Configuration\PlovrSettingsElement.cs" />
     <Compile Include="Builders\DependencyBuilder.cs" />
+    <Compile Include="Runners\BaseRunner.cs" />
+    <Compile Include="Runners\ClosureCompilerRunner.cs" />
     <Compile Include="Runners\ClosureTemplateRunner.cs" />
     <Compile Include="Model\ClosureCompilerMode.cs" />
     <Compile Include="Model\PlovrMessageType.cs" />

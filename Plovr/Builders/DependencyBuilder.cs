@@ -153,7 +153,7 @@ namespace Plovr.Builders
 			// this exception should never happen but nonetheless, here it is.
 			if (this.Require.ContainsKey(filePath))
 			{
-				throw new Exception("This JavaScript file has already been parsed. Something really went wrong. The file that got parsed again was: " + filePath);
+				throw new Exception("This file has already been parsed. Something really went wrong. The file that got parsed again was: " + filePath);
 			}
 
 			this.Require.Add(filePath, new List<string>());
@@ -289,78 +289,6 @@ namespace Plovr.Builders
 			{
 				dependencyList.Add(filePath);
 			}
-		}
-
-		#endregion
-
-		#region "Closure Compiler Integration"
-
-		/// <summary>
-		/// Run the closure compiler
-		/// </summary>
-		/// <param name="output">the standard output from the compiler</param>
-		/// <returns>the exit code from the compiler</returns>
-		public int Compile(out ClosureCompilerOutput output)
-		{
-			var closureParams = this.BuildClosureCompilerParameters();
-
-			return ProcessHelper.ExecuteJavaCommand(this.Settings.JavaPath, closureParams, out output);
-		}
-
-
-		/// <summary>
-		/// Taking a list of dependencies, use the ClosureComiplerParamBuilder to build out all the command arguments we need
-		/// to execute the jar.
-		/// </summary>
-		/// <returns>all the params as a single string, ready to be executed and pass to the java executable</returns>
-		private string BuildClosureCompilerParameters()
-		{
-			ClosureCompilerParamBuilder builder = new ClosureCompilerParamBuilder(this.Settings.ClosureCompilerJarPath);
-
-			IEnumerable<string> dependencies = this.GetDependencies();
-
-			// add all our dependency files
-			foreach (var dependencyFilePath in dependencies)
-			{
-				builder.AddJavaScriptFile(dependencyFilePath);
-			}
-
-			// add any externs
-			if (this.Project.Externs != null)
-			{
-				foreach (var externFile in this.Project.Externs)
-				{
-					builder.AddExternsFile(externFile);
-				}
-			}
-
-			// set any other closure compiler options
-			if (!string.IsNullOrEmpty(this.Project.CompilerCustomParams))
-			{
-				builder.AddRawOptions(Project.CompilerCustomParams);
-			}
-
-			// set the output file
-			if (!string.IsNullOrEmpty(Project.OutputFile))
-			{
-				builder.AddOutputFile(Project.OutputFile);
-			}
-
-			// set the compilation mode
-			builder.AddCompilationLevel(this.Project.Mode);
-
-			// return all the params
-			return builder.GetParams();
-		}
-
-		#endregion
-
-		#region "Closure Templates Integration"
-		public int CompileSoyTemplate(string file, out string output, string errorOutput)
-		{
-			var closureParams = this.BuildClosureCompilerParameters();
-
-			return ProcessHelper.ExecuteJavaCommand(this.Settings.JavaPath, closureParams, out output, out errorOutput);
 		}
 
 		#endregion

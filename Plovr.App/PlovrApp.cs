@@ -22,6 +22,7 @@ using Plovr.App.Model;
 using Plovr.Builders;
 using Plovr.Helpers;
 using Plovr.Model;
+using Plovr.Runners;
 
 namespace Plovr.App
 {
@@ -117,7 +118,8 @@ namespace Plovr.App
 			ClosureCompilerOutput output;
 
 			Console.WriteLine("--- Running Compiler ---");
-			this.Builder.Compile(out output);
+			var closureCompilerRunner = new ClosureCompilerRunner(this.Settings, this.Project);
+			closureCompilerRunner.Compile(Builder.GetDependencies(), out output);
 			Console.WriteLine("--- Compiler Complete ---");
 			Console.WriteLine();
 

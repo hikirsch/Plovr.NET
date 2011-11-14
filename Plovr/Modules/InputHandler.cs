@@ -22,7 +22,7 @@ namespace Plovr.Modules
 						string errorOutput;
 
 						var closureTemplateRunner = new ClosureTemplateRunner(this.currentSettings, this.currentProject);
-						closureTemplateRunner.Compile(fullFilePath, out plovrSoyContents, out output, out errorOutput);
+						closureTemplateRunner.GetCompile(fullFilePath, out plovrSoyContents, out output, out errorOutput);
 
 						context.Response.Write(plovrSoyContents);
 //						context.Response.Write("\n/*");

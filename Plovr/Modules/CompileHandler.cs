@@ -8,6 +8,7 @@ using Plovr.Builders;
 using Plovr.Configuration;
 using Plovr.Helpers;
 using Plovr.Model;
+using Plovr.Runners;
 
 namespace Plovr.Modules
 {
@@ -37,7 +38,8 @@ namespace Plovr.Modules
 		private void RunClosureCompiler(DependencyBuilder builder) {
 			// run the compiler
 			ClosureCompilerOutput output;
-			builder.Compile(out output);
+			var closureCompilerRunner = new ClosureCompilerRunner(this.currentSettings, this.currentProject);
+			closureCompilerRunner.Compile(builder.GetDependencies(), out output);
 
 			// show the response from the output
 			ShowResponse(output.StandardOutput, output.Messages, output.StandardError);
