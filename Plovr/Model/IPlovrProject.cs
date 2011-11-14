@@ -20,6 +20,7 @@ namespace Plovr.Model
 	/// </summary>
 	public interface IPlovrProject
 	{
+		string Id { get; set; }
 		IEnumerable<string> BasePaths { get; set; }
 		IEnumerable<string> Namespaces { get; set; }
 		IEnumerable<string> Externs { get; set; }

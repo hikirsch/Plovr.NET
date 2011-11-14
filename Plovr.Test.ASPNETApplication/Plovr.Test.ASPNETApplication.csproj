@@ -51,7 +51,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AUTHORS" />
     <Content Include="css\closure\autocomplete.css" />
     <Content Include="css\closure\bubble.css" />
     <Content Include="css\closure\button.css" />
@@ -1630,7 +1629,6 @@
     <Content Include="js\tests\test.SayHi.js" />
     <Content Include="js\tests\test.ToolTip.js" />
     <None Include="js\tests\test.SoyTemplate.Test1.soy" />
-    <None Include="LICENSE" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

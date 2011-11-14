@@ -1,21 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿// Copyright 2011 Ogilvy & Mather. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+using System;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Web;
-using Plovr.Builders;
-using Plovr.Configuration;
-using Plovr.Helpers;
-using Plovr.Model;
 
 namespace Plovr.Modules
 {
 	// http://code.google.com/p/plovr/source/browse/src/org/plovr/AbstractGetHandler.java
 	class PlovrHttpModule : IHttpModule
 	{
+		/// <summary>
+		/// The main Plovr.NET handler.
+		/// </summary>
+		public const string PlovrUrlHandler  = "/Plovr.NET";
+
 		/// <summary>
 		/// Register this module so that it listens on every Http Request.
 		/// </summary>
@@ -37,7 +47,7 @@ namespace Plovr.Modules
 			string url = context.Request.RawUrl.ToLower();
 
 			// make sure this is a plovr request; otherwise, pass it along
-			if (!url.StartsWith("/plovr.net")) return;
+			if (!url.StartsWith(PlovrUrlHandler, StringComparison.OrdinalIgnoreCase)) return;
 
 			// Pass extra url params in to the appropriate handler
 			// TODO: support all command_names from Plovr, @see http://code.google.com/p/plovr/source/browse/src/org/plovr/Handler.java 
@@ -103,17 +113,6 @@ namespace Plovr.Modules
 
 			// run the handler
 			handler.Run();
-		}
-
-		void context_BeginRequest(object sender, System.EventArgs e)
-		{
-			var context = HttpContext.Current;
-			if (context.Request.RawUrl.StartsWith("/plovr/"))
-			{
-				context.Response.ContentType = "text/html";
-				context.Response.Write("I'm Here");
-				context.Response.End();
-			}
 		}
 
 		public void Dispose() { }

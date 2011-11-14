@@ -82,6 +82,8 @@
     <Content Include="compiler.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Html\IndexHandler.html" />
+    <EmbeddedResource Include="Html\IndexHandlerConfig.html" />
     <Content Include="SoyToJsSrcCompiler.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

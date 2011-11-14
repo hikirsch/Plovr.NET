@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using Plovr.Model;
 
@@ -49,7 +51,13 @@ namespace Plovr.Configuration
 			return ConfigurationManager.GetSection(SectionName) as PlovrConfiguration;
 		}
 
-		public static void GetStrongTypedConfig(out PlovrSettings settings, out PlovrProject project, string id)
+		/// <summary>
+		/// Retrieve the current settings and project by it's id.
+		/// </summary>
+		/// <param name="id">the id of the plovr project to be retrieved</param>
+		/// <param name="settings">the current settings</param>
+		/// <param name="project">the current project</param>
+		public static void GetCurrentPlovrSettingsAndProjectById(string id, out PlovrSettings settings, out PlovrProject project)
 		{
 			var plovrConfiguration = GetConfig();
 
@@ -65,6 +73,23 @@ namespace Plovr.Configuration
 					? plovrConfiguration.ProjectsElement.DefaultProjectElement
 					: plovrConfiguration.ProjectsElement.GetProjectById(id)
 			);
+		}
+
+		/// <summary>
+		/// Return all the PlovrProjects configured.
+		/// </summary>
+		/// <returns>all plovr projets</returns>
+		public static IEnumerable<IPlovrProject> GetAllProjects()
+		{
+			List<IPlovrProject> allProjects = new List<IPlovrProject>();
+			PlovrConfiguration myConfig = GetConfig();
+
+			foreach( PlovrProjectElement projectElement in myConfig.ProjectsElement)
+			{
+				allProjects.Add(Mappers.ToPlovrProject(projectElement));
+			}
+
+			return allProjects;
 		}
     }
 }

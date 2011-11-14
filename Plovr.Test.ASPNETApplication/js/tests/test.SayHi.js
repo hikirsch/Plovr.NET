@@ -1,4 +1,4 @@
-﻿goog.provide('test.SayHiTest');
+﻿goog.provide('test.SayHi');
 
 goog.require('oiny.Events.DomReady');
 

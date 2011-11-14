@@ -10,6 +10,9 @@ namespace Plovr.App.Model
 	/// </summary>
 	public class PlovrJsonConfig : IPlovrProject
 	{
+		[JsonProperty("id")]
+		public string Id { get; set; }
+
 		[JsonProperty("basePaths")]
 		public IEnumerable<string> BasePaths { get; set; }
 
