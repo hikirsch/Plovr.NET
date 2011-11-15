@@ -16,9 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Reflection;
 using Newtonsoft.Json;
-using Plovr.App.Model;
 using Plovr.Builders;
 using Plovr.Helpers;
 using Plovr.Model;
@@ -314,11 +312,6 @@ namespace Plovr.App
 			        ClosureCompilerJarPath = ConfigurationManager.AppSettings["ClosureCompilerJarPath"],
 			        JavaPath = PathHelpers.ResolveJavaPath(ConfigurationManager.AppSettings["JavaExePath"])
 			    };
-
-			if (string.IsNullOrEmpty(this.Settings.ClosureCompilerJarPath))
-			{
-				this.Settings.ClosureCompilerJarPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\compiler.jar";
-			}
 		}
 
 		/// <summary>

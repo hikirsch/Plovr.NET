@@ -39,7 +39,10 @@ namespace Plovr.Modules
 		/// The constructor
 		/// </summary>
 		/// <param name="context">the current httpd context</param>
-		public CompileHandler(HttpContext context) : base(context) { }
+		public CompileHandler(HttpContext context) : base(context)
+		{
+			this.InitCurrentProject();
+		}
 
 		/// <summary>
 		/// When the compile handler runs, it will either need to process the dependency list and send that back or

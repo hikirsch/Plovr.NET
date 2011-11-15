@@ -13,7 +13,10 @@
 // limitations under the License.
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Plovr.Configuration;
 using Plovr.Helpers;
 using Plovr.Model;
@@ -25,20 +28,13 @@ namespace Plovr
 		/// <summary>
 		/// Convert a PlovrProjectElement into a PlovrProject, this is from the web.config.
 		/// </summary>
-		/// <param name="element">the PlovrProjectElement from web.config</param>
+		/// <param name="configPath">the path to the json config file</param>
+		/// <param name="basePath">a base path to resolve all the paths in the json to absolute paths</param>
 		/// <returns>a PlovrProject object</returns>
-		public static PlovrProject ToPlovrProject(PlovrProjectElement element)
+		public static IPlovrProject ToPlovrProject(string configPath, string basePath)
 		{
-			var project = new PlovrProject
-			    {
-					Id = element.Id,
-			        BasePaths = ConvertStringToList(element.BasePath),
-			        Externs = ConvertStringToList(element.ClosureExternFilesRaw),
-					Mode = MapToEnum<ClosureCompilerMode>(element.ModeRaw),
-			        Namespaces = ConvertStringToList(element.AllNamespaces),
-					CompilerCustomParams = element.CompilerCustomParams,
-					SoyCustomParams = element.SoyCustomParams
-			    };
+			string filePath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(configPath, basePath);
+			IPlovrProject project = Mappers.GetConfigFromFileNewtonsoft(filePath);
 
 			return project;
 		}
@@ -97,6 +93,31 @@ namespace Plovr
 			TEnumType result = (TEnumType) Enum.Parse(typeof(TEnumType), value, true);
 
 			return result;
+		}
+
+
+		/// <summary>
+		/// Read the JSON file using Newtonsoft.Json. Newtonsoft was preferred over the .NET native parser since the .NET
+		/// native one doesn't allow comments in the JS file itself. 
+		/// </summary>
+		/// <param name="fileName">the file to parse</param>
+		/// <returns>a PlovrJsonConfig object representation of the JSON file passed</returns>
+		public static IPlovrProject GetConfigFromFileNewtonsoft(string fileName)
+		{
+			PlovrJsonConfig config = null;
+
+			JsonSerializer serializer = new JsonSerializer
+			{
+				NullValueHandling = NullValueHandling.Ignore
+			};
+
+			using (StreamReader sr = new StreamReader(fileName))
+			using (JsonTextReader reader = new JsonTextReader(sr))
+			{
+				config = serializer.Deserialize<PlovrJsonConfig>(reader);
+			}
+
+			return config;
 		}
 	}
 }

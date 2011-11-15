@@ -20,64 +20,10 @@ namespace Plovr.Configuration
 		/// <summary>
 		/// Every project must have an id.
 		/// </summary>
-		[ConfigurationProperty("id", IsRequired = true)]
-		public string Id
+		[ConfigurationProperty("path", IsRequired = true)]
+		public string Path
 		{
-			get { return (string)this["id"]; }
-		}
-
-		/// <summary>
-		/// Gets the basePath
-		/// </summary>
-		[ConfigurationProperty("basePath", IsRequired = true)]
-		public string BasePath
-		{
-			get { return (string)this["basePath"]; }
-		}
-
-		/// <summary>
-		/// Gets any extern file for the closure compiler, comma delimited value.
-		/// </summary>
-		[ConfigurationProperty("closureExternFiles")]
-		public string ClosureExternFilesRaw
-		{
-			get { return (string)this["closureExternFiles"]; }
-		}
-
-		/// <summary>
-		/// The namespaces to include, comma delimited value.
-		/// </summary>
-		[ConfigurationProperty("namespaces", IsRequired = true)]
-		public string AllNamespaces
-		{
-			get { return (string) this["namespaces"]; }
-		}
-
-		/// <summary>
-		/// The mode to execute in. Options are ClosureCompileMode enum.
-		/// </summary>
-		[ConfigurationProperty("mode")]
-		public string ModeRaw
-		{
-			get { return (string)this["mode"]; }
-		}
-
-		/// <summary>
-		/// Any custom param that this tool may not support yet but is supported in the compiler.
-		/// </summary>
-		[ConfigurationProperty("compilerCustomParams")]
-		public string CompilerCustomParams
-		{
-			get { return (string)this["compilerCustomParams"]; }
-		}
-
-		/// <summary>
-		/// Any custom param that this tool may not support yet but is supported in the compiler.
-		/// </summary>
-		[ConfigurationProperty("soyCustomParams", IsRequired = false)]
-		public string SoyCustomParams
-		{
-			get { return (string)this["soyCustomParams"]; }
+			get { return (string)this["path"]; }
 		}
 	}
 }

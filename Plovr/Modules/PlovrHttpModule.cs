@@ -24,7 +24,7 @@ namespace Plovr.Modules
 		/// <summary>
 		/// The main Plovr.NET handler.
 		/// </summary>
-		public const string PlovrUrlHandler  = "/Plovr.NET";
+		public const string PlovrUrlHandler = "/Plovr.NET";
 
 		/// <summary>
 		/// Register this module so that it listens on every Http Request.
@@ -57,57 +57,18 @@ namespace Plovr.Modules
 
 			// instantiate handler from query string
 			Handler handler;
-			if (matches.Count > 1) { // if we have specified additional params in the url (e.g. plovr.net/compile or plovr.net/index)
-				try {
-					// convert url param to handler type string
-					MatchCollection typeMatches = Regex.Matches(matches[1].ToString(), @"[^/][^?]+", RegexOptions.IgnoreCase); // matches "compile" in "/compile?id=someId"
-					string typeStr = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(typeMatches[0].ToString().ToLower()); // convert lowercase string to titlecase
+			if (matches.Count > 1)
+			{ // if we have specified additional params in the url (e.g. plovr.net/compile or plovr.net/index)
 
-					handler = Handler.CreateInstance("Plovr.Modules." + typeStr + "Handler", context); // TODO: Protect against XSS
-				}
-				catch (Exception) {
-					handler = Handler.CreateInstance("Plovr.Modules.IndexHandler", context);
-				}
+				// convert url param to handler type string
+				MatchCollection typeMatches = Regex.Matches(matches[1].ToString(), @"[^/][^?]+", RegexOptions.IgnoreCase); // matches "compile" in "/compile?id=someId"
+				string typeStr = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(typeMatches[0].ToString().ToLower()); // convert lowercase string to titlecase
 
-				/*
-				switch (matches[1].ToString()) {
-					case "/config":
-						ConfigHandler(context);
-						break;
-					case "/compile":
-						CompileHandler(context);
-						break;
-					case "/externs":
-						ExternsHandler(context);
-						break;
-					case "/input":
-						InputHandler(context);
-						break;
-					case "/list":
-						ListHandler(context);
-						break;
-					case "/module":
-						ModuleHandler(context);
-						break;
-					case "/modules":
-						ModulesHandler(context);
-						break;
-					case "/size":
-						SizeHandler(context);
-						break;
-					case "/sourcemap":
-						SourcemapHandler(context);
-						break;
-					case "/view":
-						ViewHandler(context);
-						break;
-					default:
-						// no matching handler, render index
-						IndexHandler(context);
-						break;
-				}
-				 * */
-			} else { // else we have only specified the /plovr.net root
+				handler = Handler.CreateInstance("Plovr.Modules." + typeStr + "Handler", context); // TODO: Protect against XSS
+			}
+			else
+			{
+				// else we have only specified the /plovr.net root
 				handler = Handler.CreateInstance("Plovr.Modules.IndexHandler", context);
 			}
 

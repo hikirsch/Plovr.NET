@@ -55,38 +55,55 @@ namespace Plovr.Configuration
 		/// Retrieve the current settings and project by it's id.
 		/// </summary>
 		/// <param name="id">the id of the plovr project to be retrieved</param>
-		/// <param name="settings">the current settings</param>
-		/// <param name="project">the current project</param>
-		public static void GetCurrentPlovrSettingsAndProjectById(string id, out PlovrSettings settings, out PlovrProject project)
+		public static PlovrSettings GetCurrentPlovrSettings()
 		{
-			var plovrConfiguration = GetConfig();
+			var plovrConfiguration = PlovrConfiguration.GetConfig();
 
-			if( plovrConfiguration == null )
+			if (plovrConfiguration == null)
 			{
 				throw new NullReferenceException("The Plovr Configuration is null. Is there a section configured in the web.config properly?");
 			}
 
-			settings = Mappers.ToPlovrSettings(plovrConfiguration.Settings, HttpContext.Current.Server.MapPath("~"));
+			return Mappers.ToPlovrSettings(plovrConfiguration.Settings, HttpContext.Current.Server.MapPath("~"));
+		}
 
-			project = Mappers.ToPlovrProject(
-				string.IsNullOrEmpty(id)
-					? plovrConfiguration.ProjectsElement.DefaultProjectElement
-					: plovrConfiguration.ProjectsElement.GetProjectById(id)
-			);
+		/// <summary>
+		/// Retrieve the current settings and project by it's id.
+		/// </summary>
+		/// <param name="id">the id of the plovr project to be retrieved</param>
+		public static IPlovrProject GetCurrentPlovrProjectById(string id)
+		{
+			var plovrConfiguration = PlovrConfiguration.GetConfig();
+
+			if (plovrConfiguration == null)
+			{
+				throw new NullReferenceException("The Plovr Configuration is null. Is there a section configured in the web.config properly?");
+			}
+
+			var allProjects = PlovrConfiguration.GetAllProjects();
+
+			if (!allProjects.ContainsKey(id))
+			{
+				throw new Exception("Invalid Plovr Project Id");
+			}
+
+			return allProjects[id];
 		}
 
 		/// <summary>
 		/// Return all the PlovrProjects configured.
 		/// </summary>
 		/// <returns>all plovr projets</returns>
-		public static IEnumerable<IPlovrProject> GetAllProjects()
+		public static Dictionary<string, IPlovrProject> GetAllProjects()
 		{
-			List<IPlovrProject> allProjects = new List<IPlovrProject>();
+			string basePath = HttpContext.Current.Server.MapPath("~");
+			Dictionary<string, IPlovrProject> allProjects = new Dictionary<string, IPlovrProject>();
 			PlovrConfiguration myConfig = GetConfig();
 
-			foreach( PlovrProjectElement projectElement in myConfig.ProjectsElement)
+			foreach (PlovrProjectElement projectElement in myConfig.ProjectsElement)
 			{
-				allProjects.Add(Mappers.ToPlovrProject(projectElement));
+				var project = Mappers.ToPlovrProject(projectElement.Path, basePath);
+				allProjects.Add(project.Id, project);
 			}
 
 			return allProjects;

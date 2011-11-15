@@ -76,7 +76,7 @@ namespace Plovr.Configuration
 				throw new NullReferenceException("The PlovrProjectsElement node element is null. Weird setup in web.config?");		
 			}
 
-			return plovrProjectElement.Id;
+			return plovrProjectElement.Path;
 		}
 	}
 }				

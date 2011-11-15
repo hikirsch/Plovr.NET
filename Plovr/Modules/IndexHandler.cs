@@ -29,22 +29,22 @@ namespace Plovr.Modules
 
 		public override void Run()
 		{
-			IEnumerable<IPlovrProject> allProjects = PlovrConfiguration.GetAllProjects();
+			Dictionary<string, IPlovrProject> allProjects = PlovrConfiguration.GetAllProjects();
 			string response = this.GenerateResponse(allProjects);
 			this.ShowHtmlResponse(response);
 		}
 
-		protected string GenerateResponse(IEnumerable<IPlovrProject> allProjects)
+		protected string GenerateResponse(Dictionary<string, IPlovrProject> allProjects)
 		{
 			string indexHandlerHtml = ResourceHelper.GetTextResourceById(PlovrIndexHandlerHtml);
 			string configHtml = ResourceHelper.GetTextResourceById(PlovrIndexHandlerConfigHtml);
 
 			StringBuilder allConfigHtml = new StringBuilder();
 
-			foreach(IPlovrProject project in allProjects)
+			foreach(KeyValuePair<string, IPlovrProject> project in allProjects)
 			{
 				string currentConfigHtml = configHtml.Replace("%PLOVR_HANDLER%", this.GetRootUrl());
-				currentConfigHtml = currentConfigHtml.Replace("%ID%", project.Id);
+				currentConfigHtml = currentConfigHtml.Replace("%ID%", project.Key);
 				allConfigHtml.Append(currentConfigHtml);
 			}
 

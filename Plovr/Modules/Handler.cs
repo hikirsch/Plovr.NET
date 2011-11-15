@@ -46,7 +46,7 @@ namespace Plovr.Modules
 		/// <summary>
 		/// the current project settings that are loaded
 		/// </summary>
-		protected PlovrProject CurrentProject;
+		protected IPlovrProject CurrentProject;
 
 		/// <summary>
 		/// the current settings for plovr
@@ -73,12 +73,13 @@ namespace Plovr.Modules
 		{
 			Type handlerType = Type.GetType(typeStr);
 
-			if (handlerType != null)
+			if (handlerType == null)
 			{
-				return (Handler) Activator.CreateInstance(handlerType, new object[] {context});
+				handlerType = Type.GetType("Plovr.Modules.IndexHandler");
 			}
 
-			throw new Exception("The route '" + typeStr + "' was unable to be mapped");
+			return (Handler)Activator.CreateInstance(handlerType, new object[] { context });
+
 		}
 
 		#endregion
@@ -94,21 +95,26 @@ namespace Plovr.Modules
 			this.Context = context;
 
 			// get the project configuration and application settings
-			this.InitActiveProjectAndSettings();
+			this.InitSettings();
 		}
 
 		/// <summary>
 		/// Using the HttpContext as the current website that is loaded, load the current project and settings.
 		/// </summary>
-		private void InitActiveProjectAndSettings()
+		private void InitSettings()
 		{
-			// get the id from the QueryString
-			var id = GetIdFromUri();
-
-			PlovrConfiguration.GetCurrentPlovrSettingsAndProjectById(id, out this.CurrentSettings, out this.CurrentProject);
+			this.CurrentSettings = PlovrConfiguration.GetCurrentPlovrSettings();
 
 			// support %JAVA_HOME% env variable
 			this.CurrentSettings.JavaPath = PathHelpers.ResolveJavaPath(CurrentSettings.JavaPath);
+		}
+
+		protected void InitCurrentProject()
+		{
+			// get the id from the QueryString
+			string id = this.GetIdFromUri();
+
+			this.CurrentProject = PlovrConfiguration.GetCurrentPlovrProjectById(id);
 
 			// override the mode from the querystring if its passed
 			this.CurrentProject.Mode = this.GetModeFromQueryString() ?? CurrentProject.Mode;
