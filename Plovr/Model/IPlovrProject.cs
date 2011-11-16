@@ -20,13 +20,61 @@ namespace Plovr.Model
 	/// </summary>
 	public interface IPlovrProject
 	{
+		string ConfigPath { get; set; }
+
 		string Id { get; set; }
-		IEnumerable<string> BasePaths { get; set; }
-		IEnumerable<string> Namespaces { get; set; }
+		IEnumerable<string> Inputs { get; set; }
+		IEnumerable<string> Paths { get; set; }
 		IEnumerable<string> Externs { get; set; }
 		ClosureCompilerMode? Mode { get; set; }
-		string OutputFile { get; set; }
+		
 		string CompilerCustomParams { get; set; }
 		string SoyCustomParams { get; set; }
+		IEnumerable<string> Namespaces { get; set; }
 	}
 }
+
+/*
+Below are all the options from http://code.google.com/p/plovr/source/browse/src/org/plovr/ConfigOption.java rev d6db24beeb7f)
+
+[x] id
+[ ] inputs
+[x] paths
+[x] externs
+[ ] custom-externs-only
+[ ] closure-library
+[ ] experimental-exclude-closure-library
+[x] mode
+[ ] level
+[ ] inherits
+[ ] debug
+[ ] pretty-print
+[ ] print-input-delimiter
+[ ] output-file
+[ ] output-wrapper
+[ ] output-charset
+[ ] fingerprint
+[ ] modules
+[ ] module-output-path
+[ ] module-production-uri
+[ ] module-info-path
+[ ] global-scope-name
+[ ] define
+[ ] checks
+[ ] treat-warnings-as-errors
+[ ] export-test-functions
+[ ] name-suffixes-to-strip
+[ ] type-prefixes-to-strip
+[ ] id-generators
+[ ] ambiguate-properties
+[ ] disambiguate-properties
+[ ] experimental-compiler-options
+[ ] custom-passes
+[ ] soy-function-plugins
+[ ] jsdoc-html-output-path
+[ ] variable-map-input-file
+[ ] variable-map-output-file
+[ ] property-map-input-file
+[ ] property-map-output-file
+
+*/

@@ -50,8 +50,8 @@
     <Compile Include="Builders\JavaJarParamBuilder.cs" />
     <Compile Include="Builders\SoyToJsSrcCompilerParamBuilder.cs" />
     <Compile Include="Configuration\PlovrConfiguration.cs" />
-    <Compile Include="Configuration\PlovrProjectElement.cs" />
-    <Compile Include="Configuration\PlovrProjectsElement.cs" />
+    <Compile Include="Configuration\JsonConfigElement.cs" />
+    <Compile Include="Configuration\JsonConfigsElement.cs" />
     <Compile Include="Configuration\PlovrSettingsElement.cs" />
     <Compile Include="Builders\DependencyBuilder.cs" />
     <Compile Include="Converters\JsonStringOrArrayToStringListConverter.cs" />
@@ -68,7 +68,6 @@
     <Compile Include="Model\IPlovrSettings.cs" />
     <Compile Include="Model\ClosureCompilerOutput.cs" />
     <Compile Include="Model\ClosureCompilerMessage.cs" />
-    <Compile Include="Model\PlovrProject.cs" />
     <Compile Include="Model\PlovrSettings.cs" />
     <Compile Include="Mappers.cs" />
     <Compile Include="Modules\CompileHandler.cs" />

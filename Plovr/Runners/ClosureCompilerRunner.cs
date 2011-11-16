@@ -115,12 +115,6 @@ namespace Plovr.Runners
 				builder.AddRawOptions(Project.CompilerCustomParams);
 			}
 
-			// set the output file
-			if (!string.IsNullOrEmpty(Project.OutputFile))
-			{
-				builder.AddOutputFile(Project.OutputFile);
-			}
-
 			// set the compilation mode
 			builder.AddCompilationLevel(this.Project.Mode);
 

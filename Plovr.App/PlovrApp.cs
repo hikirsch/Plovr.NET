@@ -154,9 +154,9 @@ namespace Plovr.App
 				Console.WriteLine("Namespaces: " + String.Join(", ", this.Project.Namespaces));
 			}
 			
-			if (this.Project.BasePaths != null)
+			if (this.Project.Paths != null)
 			{
-				Console.WriteLine("Base Paths: " + String.Join(", ", this.Project.BasePaths));	
+				Console.WriteLine("Base Paths: " + String.Join(", ", this.Project.Paths));	
 			}
 			
 			Console.WriteLine("Output File: " + this.Project.OutputFile);
@@ -304,7 +304,7 @@ namespace Plovr.App
 			this.Project = this.GetConfigFromFileNewtonsoft(this.ConfigFilePath);
 
 			this.Project.Externs = PathHelpers.MakeAbsoluteFromUrlAndBasePath(this.Project.Externs, this.WebRootPath);
-			this.Project.BasePaths = PathHelpers.MakeAbsoluteFromUrlAndBasePath(this.Project.BasePaths, this.WebRootPath);
+			this.Project.Paths = PathHelpers.MakeAbsoluteFromUrlAndBasePath(this.Project.Paths, this.WebRootPath);
 			this.Project.OutputFile = PathHelpers.MakeAbsoluteFromUrlAndBasePath(this.Project.OutputFile, this.WebRootPath);
 
 			this.Settings = new PlovrSettings

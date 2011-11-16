@@ -31,7 +31,7 @@ namespace Plovr.Modules
 		{
 			string relFilePath = GetFilePathFromUri(CurrentProject.Id);
 
-			foreach (string basePath in CurrentProject.BasePaths)
+			foreach (string basePath in CurrentProject.Paths)
 			{
 				string fullFilePath = basePath + relFilePath;
 				if (File.Exists(fullFilePath))

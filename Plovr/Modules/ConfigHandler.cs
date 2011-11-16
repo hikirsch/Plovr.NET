@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Plovr.Modules
@@ -20,7 +22,20 @@ namespace Plovr.Modules
 		public ConfigHandler(HttpContext context) : base(context) { }
 
 		public override void Run() {
+			this.InitCurrentProject();
 
+			this.ShowJavaScriptFileResponse(this.CurrentProject.ConfigPath);
+		}
+
+		/// <summary>
+		/// Override to get ID from the Uri path instead of from the query string.
+		/// Returns the first path item after "/input/" as the id.
+		/// </summary>				
+		protected override string GetIdFromUri()
+		{
+			MatchCollection mc = Regex.Matches(this.Context.Request.Path, @"config/([^/]+)", RegexOptions.IgnoreCase);
+			string idMatch = mc[0].Groups[1].ToString();
+			return idMatch;
 		}
 	}
 }

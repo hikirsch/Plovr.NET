@@ -107,7 +107,7 @@ namespace Plovr.Builders
 		/// </summary>
 		private void BuildDepedencyTree()
 		{
-			foreach (string path in this.Project.BasePaths)
+			foreach (string path in this.Project.Paths)
 			{
 				// get all the JS depedencies
 				BuildDepedencyTree(path, "*.JS", GetDetailsFromJsFilePath, JavascriptFunctionCallWithParam);
@@ -210,6 +210,7 @@ namespace Plovr.Builders
 							{
 								throw new Exception("error parsing file: " + filePath + ". Namespace detected as: '" + value + "'");
 							}
+
 							this.Require[filePath].Add(value);
 						}
 					}
@@ -244,12 +245,30 @@ namespace Plovr.Builders
 		public IEnumerable<string> GetDependencies()
 		{
 			// we must add the base js file, so it goes here.
-			// TODO: check this.BasePaths to see if it contains PATH_TO_BASE_JS instead of hack
-			List<string> dependencies = new List<string> { this.Project.BasePaths.ToList()[0] + PathToBaseJS };
+			// TODO: check this.Paths to see if it contains PATH_TO_BASE_JS instead of hack
+			List<string> dependencies = new List<string> { this.Project.Paths.ToList()[0] + PathToBaseJS };
 
-			foreach (var ns in this.Project.Namespaces)
+			if (this.Project.Namespaces != null)
 			{
-				this.RecurseDependencies(ns, ref dependencies);
+				foreach (var ns in this.Project.Namespaces)
+				{
+					this.RecurseDependencies(ns, ref dependencies);
+				}
+			}
+
+			if (this.Project.Inputs != null)
+			{
+				foreach (var input in this.Project.Inputs)
+				{
+					if (this.Require.ContainsKey(input))
+					{
+						List<string> requiredNS = this.Require[input];
+						foreach (string ns in requiredNS)
+						{
+							this.RecurseDependencies(ns, ref dependencies);
+						}
+					}
+				}
 			}
 
 			return dependencies;

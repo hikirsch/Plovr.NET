@@ -119,12 +119,15 @@ namespace Plovr.Modules
 			// override the mode from the querystring if its passed
 			this.CurrentProject.Mode = this.GetModeFromQueryString() ?? CurrentProject.Mode;
 
+			string rootPath = Context.Request.MapPath("~");
+
 			// reformat the base paths so we have full paths
-			this.CurrentProject.BasePaths = CurrentProject.BasePaths.Select(Context.Server.MapPath);
+			this.CurrentProject.Paths = PathHelpers.MakeAbsoluteFromUrlAndBasePath(CurrentProject.Paths,rootPath);
+			this.CurrentProject.Inputs = PathHelpers.MakeAbsoluteFromUrlAndBasePath(CurrentProject.Inputs, rootPath);
 
 			if (this.CurrentProject.Externs != null)
 			{
-				this.CurrentProject.Externs = CurrentProject.Externs.Select(Context.Server.MapPath);
+				this.CurrentProject.Externs = CurrentProject.Externs.Select(x => PathHelpers.MakeAbsoluteFromUrlAndBasePath(x, rootPath));
 			}
 		}
 

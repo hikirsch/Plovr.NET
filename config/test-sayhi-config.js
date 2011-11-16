@@ -1,6 +1,6 @@
 {
 	"id": "test-sayhi",
-	"basePath": "~/js",
-	"namespaces": "test.SayHi",
+	"paths": "js",
+	"inputs": "js/tests/test.SayHi.js",
 	"mode": "raw"
 }

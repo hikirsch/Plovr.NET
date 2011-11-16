@@ -12,13 +12,16 @@ namespace Plovr.Model
 		[JsonProperty("id")]
 		public string Id { get; set; }
 
-		[JsonProperty("basePath")]
-		[JsonConverter(typeof(StringOrArrayConverter))]
-		public IEnumerable<string> BasePaths { get; set; }
+		[JsonIgnore]
+		public string ConfigPath { get; set; }
 
-		[JsonProperty("namespaces")]
+		[JsonProperty("paths")]
 		[JsonConverter(typeof(StringOrArrayConverter))]
-		public IEnumerable<string> Namespaces { get; set; }
+		public IEnumerable<string> Paths { get; set; }
+
+		[JsonProperty("inputs")]
+		[JsonConverter(typeof(StringOrArrayConverter))]
+		public IEnumerable<string> Inputs { get; set; }
 
 		[JsonProperty("externs")]
 		[JsonConverter(typeof(StringOrArrayConverter))]
@@ -27,13 +30,14 @@ namespace Plovr.Model
 		[JsonProperty("mode")]
 		public ClosureCompilerMode? Mode { get; set; }
 
-		[JsonProperty("outputFile")]
-		public string OutputFile { get; set; }
-
 		[JsonProperty("compilerCustomParams")]
 		public string CompilerCustomParams { get; set; }
 
 		[JsonProperty("soyCustomParams")]
 		public string SoyCustomParams { get; set; }
+
+		[JsonProperty("namespaces")]
+		[JsonConverter(typeof(StringOrArrayConverter))]
+		public IEnumerable<string> Namespaces { get; set; }
 	}
 }

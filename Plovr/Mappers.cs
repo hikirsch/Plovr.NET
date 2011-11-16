@@ -26,7 +26,7 @@ namespace Plovr
 	internal static class Mappers
 	{
 		/// <summary>
-		/// Convert a PlovrProjectElement into a PlovrProject, this is from the web.config.
+		/// Convert a JsonConfigElement into a PlovrProject, this is from the web.config.
 		/// </summary>
 		/// <param name="configPath">the path to the json config file</param>
 		/// <param name="basePath">a base path to resolve all the paths in the json to absolute paths</param>
@@ -35,6 +35,7 @@ namespace Plovr
 		{
 			string filePath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(configPath, basePath);
 			IPlovrProject project = Mappers.GetConfigFromFileNewtonsoft(filePath);
+			project.ConfigPath = filePath;
 
 			return project;
 		}
@@ -52,7 +53,7 @@ namespace Plovr
 					ClosureCompilerJarPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.ClosureCompilerJarPath, basePath),
 					SoyToJsSrcCompilerJarPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.SoyToJsSrcCompilerJarPath, basePath),
 					IncludePath = element.IncludePath,
-					JavaPath = PathHelpers.MakeAbsoluteFromUrlAndBasePath(element.JavaPath, basePath)
+					JavaPath = element.JavaPath
 				};
 
 			return settings;

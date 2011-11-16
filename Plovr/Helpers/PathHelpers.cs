@@ -13,6 +13,7 @@
 // limitations under the License.
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Plovr.Helpers
@@ -69,7 +70,17 @@ namespace Plovr.Helpers
 			if (string.IsNullOrEmpty(path)) return null;
 
 			string fixedPath = path.Replace('/', '\\');
-			return fixedPath.Replace("~", basePath);
+			if (path.Contains("~"))
+			{
+				fixedPath = fixedPath.Replace("~", basePath);
+			}
+			else
+			{
+				fixedPath = basePath + "\\" + fixedPath;
+				// fixedPath = Path.GetDirectoryName(fixedPath);
+			}
+
+			return fixedPath;
 		}
 
 		/// <summary>

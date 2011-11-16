@@ -1,7 +1,7 @@
 {
 	"id": "test-tooltip",
-	"basePath": "~/js",
-	"namespaces": "test.ToolTip",
+	"paths": "js",
+	"inputs": "js/tests/test.ToolTip.js",
 	"mode": "raw",
-	"compilerCustomParams": "--warning_level=VERBOSE --jscomp_off=checkTypes"
+	"compilerCustomParams": "--output_wrapper='(function(){%output%})();' --warning_level=VERBOSE --jscomp_off=checkTypes"
 }

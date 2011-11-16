@@ -34,12 +34,12 @@ namespace Plovr.Configuration
 		}
 
 		/// <summary>
-		/// The projects node contains a single PlovrProjectElement.
+		/// The projects node contains a single JsonConfigElement.
 		/// </summary>
-		[ConfigurationProperty("projects")]
-		public PlovrProjectsElement ProjectsElement
+		[ConfigurationProperty("jsonConfigs")]
+		public JsonConfigsElement ProjectsElement
 		{
-			get { return this["projects"] as PlovrProjectsElement; }
+			get { return this["jsonConfigs"] as JsonConfigsElement; }
 		}
 
 		/// <summary>
@@ -100,7 +100,7 @@ namespace Plovr.Configuration
 			Dictionary<string, IPlovrProject> allProjects = new Dictionary<string, IPlovrProject>();
 			PlovrConfiguration myConfig = GetConfig();
 
-			foreach (PlovrProjectElement projectElement in myConfig.ProjectsElement)
+			foreach (JsonConfigElement projectElement in myConfig.ProjectsElement)
 			{
 				var project = Mappers.ToPlovrProject(projectElement.Path, basePath);
 				allProjects.Add(project.Id, project);
