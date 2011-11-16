@@ -14,7 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Plovr.Helpers;
 using Plovr.Model;
@@ -245,9 +244,8 @@ namespace Plovr.Builders
 		public IEnumerable<string> GetDependencies()
 		{
 			// we must add the base js file, so it goes here.
-			// TODO: check this.Paths to see if it contains PATH_TO_BASE_JS instead of hack
-			List<string> dependencies = new List<string> { this.Project.Paths.ToList()[0] + PathToBaseJS };
-
+			List<string> dependencies = new List<string> { this.GetGoogBasePath() };
+			 
 			if (this.Project.Namespaces != null)
 			{
 				foreach (var ns in this.Project.Namespaces)
@@ -262,16 +260,32 @@ namespace Plovr.Builders
 				{
 					if (this.Require.ContainsKey(input))
 					{
-						List<string> requiredNS = this.Require[input];
-						foreach (string ns in requiredNS)
+						List<string> requiredNs = this.Require[input];
+						foreach (string ns in requiredNs)
 						{
 							this.RecurseDependencies(ns, ref dependencies);
 						}
+
+						dependencies.Add(input);
 					}
 				}
 			}
 
 			return dependencies;
+		}
+
+		private string GetGoogBasePath()
+		{
+			//PathToBaseJS
+			foreach (string path in this.Project.Paths)
+			{
+				if( File.Exists(path + PathToBaseJS))
+				{
+					return path + PathToBaseJS;
+				}
+			}
+
+			throw new Exception("Cannot find goog/base.js!");
 		}
 
 		/// <summary>

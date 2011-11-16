@@ -18,9 +18,12 @@ using Plovr.Runners;
 
 namespace Plovr.Modules
 {
-	class InputHandler : Handler
+	internal class InputHandler : Handler
 	{
-		public InputHandler(HttpContext context) : base(context) { }
+		public InputHandler(HttpContext context) : base(context)
+		{
+			this.InitCurrentProject();
+		}
 
 		/// <summary>
 		/// When we run, we need to parse the URL for the specific file that's being requested. If the file that's being requested

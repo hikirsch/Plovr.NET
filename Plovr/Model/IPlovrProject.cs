@@ -38,7 +38,7 @@ namespace Plovr.Model
 Below are all the options from http://code.google.com/p/plovr/source/browse/src/org/plovr/ConfigOption.java rev d6db24beeb7f)
 
 [x] id
-[ ] inputs
+[x] inputs
 [x] paths
 [x] externs
 [ ] custom-externs-only

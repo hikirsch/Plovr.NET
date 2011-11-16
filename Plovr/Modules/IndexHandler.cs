@@ -20,7 +20,7 @@ using Plovr.Model;
 
 namespace Plovr.Modules
 {
-	class IndexHandler : Handler
+	internal class IndexHandler : Handler
 	{
 		private const string PlovrIndexHandlerHtml = "Plovr.Html.IndexHandler.html";
 		private const string PlovrIndexHandlerConfigHtml = "Plovr.Html.IndexHandlerConfig.html";

@@ -19,7 +19,7 @@ using System.Web;
 namespace Plovr.Modules
 {
 	// http://code.google.com/p/plovr/source/browse/src/org/plovr/AbstractGetHandler.java
-	class PlovrHttpModule : IHttpModule
+	internal class PlovrHttpModule : IHttpModule
 	{
 		/// <summary>
 		/// The main Plovr.NET handler.

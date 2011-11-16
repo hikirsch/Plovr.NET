@@ -249,6 +249,27 @@ namespace Plovr.Modules
 		}
 
 		/// <summary>
+		/// Pass a full path and convert it to an input handler path
+		/// </summary>
+		/// <param name="fullPath">the full path to convert</param>
+		/// <returns>the url of the input handler</returns>
+		protected string ResolveInputPath(string fullPath)
+		{
+			foreach (string basePath in this.CurrentProject.Paths)
+			{
+				if (fullPath.StartsWith(basePath))
+				{
+					string relativeToBasePath = this.FixSlash(fullPath.Substring(basePath.Length + 1));
+					string inputPath = this.GetRootUrl() + "/input/" + CurrentProject.Id + "/" + relativeToBasePath;
+					return inputPath;
+				}
+			}
+
+			throw new Exception("Matching base path not found.  Cannot resolve input path from full path.");
+		}
+
+
+		/// <summary>
 		/// Windows file system slashes are \, URL's are in /, this makes things a little easier for us.
 		/// </summary>
 		/// <param name="str">the string we want to switch the slashes in</param>

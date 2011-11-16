@@ -17,7 +17,7 @@ using System.Web;
 
 namespace Plovr.Modules
 {
-	class ConfigHandler : Handler
+	internal class ConfigHandler : Handler
 	{
 		public ConfigHandler(HttpContext context) : base(context) { }
 

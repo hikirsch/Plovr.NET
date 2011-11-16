@@ -56,6 +56,7 @@
     <Compile Include="Builders\DependencyBuilder.cs" />
     <Compile Include="Converters\JsonStringOrArrayToStringListConverter.cs" />
     <Compile Include="Model\PlovrJsonConfig.cs" />
+    <Compile Include="Modules\ListHandler.cs" />
     <Compile Include="Runners\BaseRunner.cs" />
     <Compile Include="Runners\ClosureCompilerRunner.cs" />
     <Compile Include="Runners\ClosureTemplateRunner.cs" />
@@ -85,6 +86,7 @@
     </Content>
     <EmbeddedResource Include="Html\IndexHandler.html" />
     <EmbeddedResource Include="Html\IndexHandlerConfig.html" />
+    <EmbeddedResource Include="Html\ListHandler.html" />
     <Content Include="SoyToJsSrcCompiler.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

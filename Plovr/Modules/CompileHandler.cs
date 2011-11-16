@@ -132,26 +132,5 @@ namespace Plovr.Modules
 
 			this.GenerateResponse(plovrJavaScriptIncluder, null, string.Empty);
 		}
-
-
-		/// <summary>
-		/// Pass a full path and convert it to an input handler path
-		/// </summary>
-		/// <param name="fullPath">the full path to convert</param>
-		/// <returns>the url of the input handler</returns>
-		private string ResolveInputPath(string fullPath)
-		{
-			foreach (string basePath in this.CurrentProject.Paths)
-			{
-				if (fullPath.StartsWith(basePath))
-				{
-					string relativeToBasePath = this.FixSlash(fullPath.Substring(basePath.Length + 1));
-					string inputPath = this.GetRootUrl() + "/input/" + CurrentProject.Id + "/" + relativeToBasePath;
-					return inputPath;
-				}
-			}
-
-			throw new Exception("Matching base path not found.  Cannot resolve input path from full path.");
-		}
 	}
 }
