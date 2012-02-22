@@ -18,27 +18,27 @@ namespace Plovr.Configuration
 {
 	public class PlovrSettingsElement : ConfigurationElement, IPlovrSettings
 	{
-		[ConfigurationProperty("javaPath")]
+		[ConfigurationProperty("javaPath", IsRequired = false)]
 		public string JavaPath
 		{
 			get { return (string)this["javaPath"]; }
 			set { throw new System.NotImplementedException(); }
 		}
 
-		[ConfigurationProperty("closureCompilerJarPath", IsRequired = true)]
+		[ConfigurationProperty("closureCompilerJarPath", IsRequired = false)]
 		public string ClosureCompilerJarPath
 		{
 			get { return (string)this["closureCompilerJarPath"]; }
 			set { throw new System.NotImplementedException(); }
 		}
 
-		[ConfigurationProperty("soyToJsSrcCompilerJarPath", IsRequired = true)]
+		[ConfigurationProperty("soyToJsSrcCompilerJarPath", IsRequired = false)]
 		public string SoyToJsSrcCompilerJarPath
 		{
 			get { return (string) this["soyToJsSrcCompilerJarPath"]; }
 		}
 
-		[ConfigurationProperty("includePath", IsRequired = true)]
+		[ConfigurationProperty("includePath", IsRequired = false)]
 		public string IncludePath
 		{
 			get { return (string)this["includePath"]; }

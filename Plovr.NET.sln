@@ -5,6 +5,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plovr", "Plovr\Plovr.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plovr.Test.ASPNETApplication", "Plovr.Test.ASPNETApplication\Plovr.Test.ASPNETApplication.csproj", "{232085C5-9790-43CB-B391-DD733424EDC7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{FCB1A4FB-FB22-4A7E-ABD5-4D46E189BD72}"
+	ProjectSection(SolutionItems) = preProject
+		config\plovr-MessageSystem-config.js = config\plovr-MessageSystem-config.js
+		config\test-calendar-config.js = config\test-calendar-config.js
+		config\test-jquery-config.js = config\test-jquery-config.js
+		config\test-sayhi-config.js = config\test-sayhi-config.js
+		config\test-Soy-config.js = config\test-Soy-config.js
+		config\test-tooltip-config.js = config\test-tooltip-config.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

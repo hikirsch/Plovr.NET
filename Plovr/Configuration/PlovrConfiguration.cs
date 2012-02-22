@@ -27,7 +27,7 @@ namespace Plovr.Configuration
 		/// <summary>
 		/// The settings node contains all the appliaction level options available.
 		/// </summary>
-        [ConfigurationProperty("settings") ]
+		[ConfigurationProperty("settings", IsRequired = true)]
 		public PlovrSettingsElement Settings
 		{
 			get { return this["settings"] as PlovrSettingsElement; }
@@ -36,7 +36,7 @@ namespace Plovr.Configuration
 		/// <summary>
 		/// The projects node contains a single JsonConfigElement.
 		/// </summary>
-		[ConfigurationProperty("jsonConfigs")]
+		[ConfigurationProperty("jsonConfigs", IsRequired =  false)]
 		public JsonConfigsElement ProjectsElement
 		{
 			get { return this["jsonConfigs"] as JsonConfigsElement; }
