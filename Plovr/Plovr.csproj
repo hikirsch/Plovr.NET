@@ -81,15 +81,9 @@
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="compiler.jar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Html\IndexHandler.html" />
     <EmbeddedResource Include="Html\IndexHandlerConfig.html" />
     <EmbeddedResource Include="Html\ListHandler.html" />
-    <Content Include="SoyToJsSrcCompiler.jar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="JavaScript\MessageSystem.js" />
     <EmbeddedResource Include="JavaScript\ScriptLoader.js" />
   </ItemGroup>
