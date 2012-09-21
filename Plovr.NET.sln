@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{FCB1A4
 		config\test-jquery-config.js = config\test-jquery-config.js
 		config\test-sayhi-config.js = config\test-sayhi-config.js
 		config\test-Soy-config.js = config\test-Soy-config.js
+		config\test-Soy-config2.js = config\test-Soy-config2.js
 		config\test-tooltip-config.js = config\test-tooltip-config.js
 	EndProjectSection
 EndProject

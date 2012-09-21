@@ -87,6 +87,13 @@
     <EmbeddedResource Include="JavaScript\MessageSystem.js" />
     <EmbeddedResource Include="JavaScript\ScriptLoader.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="JavaScript\GoogBase.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="JavaScript\soyutils.js" />
+    <EmbeddedResource Include="JavaScript\soyutils_usegoog.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -255,6 +255,12 @@ namespace Plovr.Modules
 		/// <returns>the url of the input handler</returns>
 		protected string ResolveInputPath(string fullPath)
 		{
+			if (fullPath.IndexOf("/$$/$$", StringComparison.Ordinal) > -1)
+			{
+				string inputPath = this.GetRootUrl() + "/input/" + CurrentProject.Id + fullPath;
+				return inputPath;
+			}
+			
 			foreach (string basePath in this.CurrentProject.Paths)
 			{
 				if (fullPath.StartsWith(basePath))

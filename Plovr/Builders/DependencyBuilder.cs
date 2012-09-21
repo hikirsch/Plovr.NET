@@ -50,6 +50,21 @@ namespace Plovr.Builders
 		private const string PathToBaseJS = @"\goog\base.js";
 
 		/// <summary>
+		/// The built-in path for goog/base.js
+		/// </summary>
+		public const string BuiltInPathForSoyJsUseGoog = "/$$/$$/$$/closure/soyutils_usegoog.js";
+
+		/// <summary>
+		/// The built-in path for goog/base.js
+		/// </summary>
+		public const string BuiltInPathForSoyUtilsJs = "/$$/$$/$$/closure/soyutils.js";
+
+		/// <summary>
+		/// The built-in path for goog/base.js
+		/// </summary>
+		public const string BuiltInPathForGoogBaseJs = "/$$/$$/$$/closure/goog/base.js";
+
+		/// <summary>
 		/// The current project we are going to be building for.
 		/// </summary>
 		private IPlovrProject Project { get; set; }
@@ -285,7 +300,7 @@ namespace Plovr.Builders
 				}
 			}
 
-			throw new Exception("Cannot find goog/base.js!");
+			return BuiltInPathForGoogBaseJs;
 		}
 
 		/// <summary>
@@ -305,6 +320,29 @@ namespace Plovr.Builders
 
 			// get the file that provides the namespace we're looking to get details on.
 			string filePath = this.Provide[jsNamespace];
+
+			if (filePath.EndsWith(".soy", StringComparison.InvariantCultureIgnoreCase))
+			{
+				if (this.Provide.ContainsKey("soy"))
+				{
+					this.RecurseDependencies("soy", ref dependencyList);
+				}
+				else if (this.Provide.ContainsKey("goog.soy"))
+				{
+					if (!dependencyList.Contains(DependencyBuilder.BuiltInPathForSoyJsUseGoog))
+					{
+						this.RecurseDependencies("goog.soy", ref dependencyList);
+						dependencyList.Add(DependencyBuilder.BuiltInPathForSoyJsUseGoog);
+					}
+				}
+				else
+				{
+					if (!dependencyList.Contains(DependencyBuilder.BuiltInPathForSoyUtilsJs))
+					{
+						dependencyList.Add(DependencyBuilder.BuiltInPathForSoyUtilsJs);
+					}
+				}
+			}
 
 			// it's possible that this file may not even require anything and is a standalone file that can be provided, if thats
 			// the case then we dont need to recurse.

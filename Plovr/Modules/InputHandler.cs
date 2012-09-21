@@ -11,15 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Web;
+using Plovr.Builders;
 using Plovr.Runners;
 
 namespace Plovr.Modules
 {
 	internal class InputHandler : Handler
 	{
+		public const string GoogBaseJsResourceId = "Plovr.JavaScript.GoogBase.js";
+		public const string SoyUtilsJsResourceId = "Plovr.JavaScript.soyutils.js";
+		public const string SoyUtilsUseGoogResourceId = "Plovr.JavaScript.soyutils_usegoog.js";
+
 		public InputHandler(HttpContext context) : base(context)
 		{
 			this.InitCurrentProject();
@@ -33,6 +40,22 @@ namespace Plovr.Modules
 		public override void Run()
 		{
 			string relFilePath = GetFilePathFromUri(CurrentProject.Id);
+
+			if (relFilePath.Equals(DependencyBuilder.BuiltInPathForGoogBaseJs, StringComparison.InvariantCultureIgnoreCase))
+			{
+				string baseJs = Helpers.ResourceHelper.GetTextResourceById(InputHandler.GoogBaseJsResourceId);
+				this.ShowJavaScriptResponse(baseJs);
+			}
+			else if( relFilePath.Equals(DependencyBuilder.BuiltInPathForSoyJsUseGoog, StringComparison.InvariantCultureIgnoreCase))
+			{
+				string baseJs = Helpers.ResourceHelper.GetTextResourceById(InputHandler.SoyUtilsUseGoogResourceId);
+				this.ShowJavaScriptResponse(baseJs);
+			}
+			else if (relFilePath.Equals(DependencyBuilder.BuiltInPathForSoyUtilsJs, StringComparison.InvariantCultureIgnoreCase))
+			{
+				string baseJs = Helpers.ResourceHelper.GetTextResourceById(InputHandler.SoyUtilsJsResourceId);
+				this.ShowJavaScriptResponse(baseJs);
+			}
 
 			foreach (string basePath in CurrentProject.Paths)
 			{

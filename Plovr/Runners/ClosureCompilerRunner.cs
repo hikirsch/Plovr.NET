@@ -11,10 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Plovr.Builders;
+using Plovr.Helpers;
 using Plovr.Model;
+using Plovr.Modules;
 
 namespace Plovr.Runners
 {
@@ -35,14 +39,14 @@ namespace Plovr.Runners
 			IEnumerable<string> soyDependencies = this.CreateSoyJsFromDependencies(dependencies, out list);
 
 			string closureParams = this.BuildParams(list);
-
+			
 			int exitCode = ProcessHelper.ExecuteJavaCommand(this.Settings.JavaPath, closureParams, out output);
 
 			foreach (string soyDependency in soyDependencies )
 			{
 				File.Delete(soyDependency);
 			}
-				
+
 			return exitCode;
 		}
 
@@ -57,6 +61,7 @@ namespace Plovr.Runners
 		private IEnumerable<string> CreateSoyJsFromDependencies(IEnumerable<string> dependencies, out List<string> list)
 		{
 			list = new List<string>();
+
 			List<string> soyDependencies = new List<string>();
 
 			ClosureTemplateRunner soyRunner = new ClosureTemplateRunner(this.Settings, this.Project);
@@ -74,6 +79,25 @@ namespace Plovr.Runners
 
 					list.Add(soyJsSrcFile);
 					soyDependencies.Add(soyJsSrcFile);
+				}
+				else if (dependency.Contains("/$$/$$"))
+				{
+					if (dependency.Equals(DependencyBuilder.BuiltInPathForSoyJsUseGoog, StringComparison.InvariantCultureIgnoreCase))
+					{
+						string tempPath = Path.GetTempFileName();
+						string resourceContents = ResourceHelper.GetTextResourceById(InputHandler.SoyUtilsUseGoogResourceId);
+						File.WriteAllText(tempPath, resourceContents);
+						list.Add(tempPath);
+						soyDependencies.Add(tempPath);
+					}
+					else if (dependency.Equals(DependencyBuilder.BuiltInPathForSoyUtilsJs, StringComparison.InvariantCultureIgnoreCase))
+					{
+						string tempPath = Path.GetTempFileName();
+						string resourceContents = ResourceHelper.GetTextResourceById(InputHandler.SoyUtilsJsResourceId);
+						File.WriteAllText(tempPath, resourceContents);
+						list.Add(tempPath);
+						soyDependencies.Add(tempPath);
+					}
 				}
 				else
 				{

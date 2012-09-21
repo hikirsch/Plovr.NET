@@ -103,6 +103,8 @@
     <Content Include="css\closure\tristatemenuitem.css" />
     <Content Include="css\demo.css" />
     <Content Include="Default.aspx" />
+    <Content Include="js2\jquery-1.6.1-externs.js" />
+    <Content Include="js2\tests\test.SoyTemplate.js" />
     <Content Include="js\goog\array\array.js" />
     <Content Include="js\goog\array\array_test.html" />
     <Content Include="js\goog\asserts\asserts.js" />
@@ -1628,6 +1630,8 @@
     <Content Include="js\plovr\MessageSystem.js" />
     <Content Include="js\tests\test.SayHi.js" />
     <Content Include="js\tests\test.ToolTip.js" />
+    <None Include="js2\tests\test.SoyTemplate.Test2.soy" />
+    <None Include="js2\tests\test.SoyTemplate.Test1.soy" />
     <None Include="js\tests\test.SoyTemplate.Test1.soy" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

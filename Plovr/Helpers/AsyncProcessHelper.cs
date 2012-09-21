@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using Plovr.Model;
 
 namespace Plovr.Helpers
@@ -75,8 +76,6 @@ namespace Plovr.Helpers
 				UseShellExecute = false,
 				CreateNoWindow = true
 			};
-			
-			Console.WriteLine("Running Java Command: " + exePath + " " + parameters);
 
 			// prepare our shared string builders for async read
 			ProcessOutput = new StringBuilder();
